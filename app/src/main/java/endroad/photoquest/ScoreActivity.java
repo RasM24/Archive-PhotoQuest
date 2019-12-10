@@ -1,12 +1,12 @@
 package endroad.photoquest;
 
-import android.app.Activity;
 import android.os.Bundle;
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * Created by OleG on 08.01.2015.
  */
-public class ScoreActivity extends Activity {
+public class ScoreActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -1,6 +1,5 @@
 package endroad.photoquest.Places.panoram;
 
-import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
@@ -10,6 +9,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -22,11 +22,11 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import endroad.photoquest.Data;
-import endroad.photoquest.R;
 import endroad.photoquest.Places.dataPlaces;
+import endroad.photoquest.R;
 
 
-public class PointActivityGLES extends Activity implements View.OnClickListener {
+public class PointActivityGLES extends AppCompatActivity implements View.OnClickListener {
 
     private SurfaceView mGLSurfaceView;
     private Render mRender;

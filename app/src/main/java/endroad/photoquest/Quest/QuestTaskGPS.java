@@ -1,11 +1,11 @@
 package endroad.photoquest.Quest;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -17,7 +17,7 @@ import endroad.photoquest.R;
 /**
  * Created by OleG on 03.03.2015.
  */
-public class QuestTaskGPS extends Activity implements View.OnClickListener {
+public class QuestTaskGPS extends AppCompatActivity implements View.OnClickListener {
 
     TextView textView;
     Button bt_reply;
