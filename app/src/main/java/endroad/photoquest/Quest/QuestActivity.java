@@ -1,15 +1,14 @@
 package endroad.photoquest.Quest;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import androidx.appcompat.app.AppCompatActivity;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import endroad.photoquest.Data;
 import endroad.photoquest.R;
@@ -17,7 +16,7 @@ import endroad.photoquest.R;
 /**
  * Created by OleG on 11.01.2015.
  */
-public class QuestActivity extends Activity implements View.OnClickListener {
+public class QuestActivity extends AppCompatActivity implements View.OnClickListener {
 
 
     TextView textView;

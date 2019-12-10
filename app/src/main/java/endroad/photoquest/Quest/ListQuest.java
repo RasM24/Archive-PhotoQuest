@@ -1,8 +1,8 @@
 package endroad.photoquest.Quest;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -15,7 +15,7 @@ import endroad.photoquest.R;
 /**
  * Created by OleG on 18.01.2015.
  */
-public class ListQuest extends Activity {
+public class ListQuest extends AppCompatActivity {
     AdapterQuestPlaces adapter;
     ListView lvMain;
     public static ArrayList<Quest> quest = new ArrayList<Quest>();

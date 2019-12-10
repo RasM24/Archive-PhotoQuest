@@ -1,24 +1,24 @@
 package endroad.photoquest.Places;
 
-import java.util.ArrayList;
-
-import android.app.Activity;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
+import java.util.ArrayList;
+
 import endroad.photoquest.Data;
 import endroad.photoquest.MapsActivity;
-import endroad.photoquest.R;
 import endroad.photoquest.Places.panoram.PointActivityGLES;
+import endroad.photoquest.R;
 
-public class ListPlaces extends Activity {
+public class ListPlaces extends AppCompatActivity {
     AdapterListPlaces adapter;
     ListView lvMain;
     LocationManager locM;
