@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#D2CE4E37"
+        android:paddingRight="20dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="48dp"
+            android:id="@+id/imageView3"
+            android:layout_gravity="center_horizontal"
+            android:text="Места"
+            android:textSize="28sp"
+            android:textStyle="bold|italic"
+            android:paddingLeft="15dp"
+            android:paddingTop="5dp"
+            android:textColor="#FFE894"
+            android:shadowColor="#000"
+            android:shadowDx="4"
+            android:shadowDy="4"
+            android:shadowRadius="1"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/bt_showopen"
+            android:layout_gravity="right"
+            android:drawableLeft="@drawable/bt_map"
+            android:paddingTop="10dp"/>
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/lvMain"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:dividerHeight="1dp"
+        android:divider="#8000">
+    </ListView>
+
+</LinearLayout>

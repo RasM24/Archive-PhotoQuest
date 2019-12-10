@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">CityQuest</string>
+    <string name="bt_map">Достижения</string>
+    <string name="bt_point">Места</string>
+    <string name="bt_setting">Настройки</string>
+    <string name="bt_quest">Квест</string>
+    <string name="bt_exit">Выход</string>
+    <string name="bt_quest_task">Задание</string>
+    <string name="title_activity_maps">Map</string>
+
+    <string name="region_all">Всего: </string>
+    <string name="region_centt">Цетральный: </string>
+    <string name="region_kirov">Кировский: </string>
+    <string name="region_lenin">Ленинский: </string>
+    <string name="region_oktbr">Октябрьский: </string>
+    <string name="region_sovet">Советский: </string>
+    <string name="region_sverdl">Свердловский: </string>
+    <string name="region_zhelez">Железнодорожный: </string>
+    <string name="title_activity_google_play_services">GooglePlayServicesActivity</string>
+
+</resources>
