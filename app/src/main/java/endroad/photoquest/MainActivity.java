@@ -13,7 +13,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import endroad.photoquest.Places.ListPlaces;
+import endroad.photoquest.places.ListPlaces;
 import endroad.photoquest.Quest.ListQuest;
 import endroad.photoquest.data.PlaceDataSource;
 import endroad.photoquest.data.QuestDataSource;

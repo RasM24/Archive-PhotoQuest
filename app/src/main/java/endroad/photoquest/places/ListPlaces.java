@@ -1,4 +1,4 @@
-package endroad.photoquest.Places;
+package endroad.photoquest.places;
 
 import android.content.Intent;
 import android.location.Location;
@@ -10,7 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import endroad.photoquest.Places.panoram.PointActivityGLES;
+import endroad.photoquest.places.panoram.PointActivityGLES;
 import endroad.photoquest.R;
 import endroad.photoquest.data.PlaceDataSource;
 
