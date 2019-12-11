@@ -21,14 +21,15 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import androidx.appcompat.app.AppCompatActivity;
-import endroad.photoquest.Data;
-import endroad.photoquest.Places.dataPlaces;
+import endroad.photoquest.Places.DataPlaces;
 import endroad.photoquest.R;
+import endroad.photoquest.data.PlaceDataSource;
 
 
 public class PointActivityGLES extends AppCompatActivity implements View.OnClickListener {
 
-	dataPlaces point;
+	PlaceDataSource placeDataSource;
+	DataPlaces point;
 	LocationManager gps;
 	private SurfaceView mGLSurfaceView;
 	private ImageButton bt_fullscreen;
@@ -84,7 +85,8 @@ public class PointActivityGLES extends AppCompatActivity implements View.OnClick
 		mGLSurfaceView.setRenderer(mRender);
 
 		try {
-			point = Data.place.get(getIntent().getIntExtra("id", -1));
+			placeDataSource = new PlaceDataSource(this);
+			point = placeDataSource.getList().get(getIntent().getIntExtra("id", -1));
 			mRender.path = point.pathTexture;
 		} catch (Exception e) {
 			Toast t = Toast.makeText(this, e.toString(), Toast.LENGTH_LONG);

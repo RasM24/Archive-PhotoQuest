@@ -2,7 +2,6 @@ package endroad.photoquest;
 
 import java.util.ArrayList;
 
-import endroad.photoquest.Places.dataPlaces;
 import endroad.photoquest.Quest.Quest;
 
 /**
@@ -36,6 +35,5 @@ public class Data {
 	public final static String PLACE_DIFF3 = "Попотей";
 	public final static String PLACE_DIFF4 = "Хер найдешь";
 
-	public static ArrayList<dataPlaces> place = new ArrayList<>();
 	public static ArrayList<Quest> quest = new ArrayList<>();
 }

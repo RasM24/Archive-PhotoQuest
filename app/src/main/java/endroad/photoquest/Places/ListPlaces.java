@@ -9,15 +9,13 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import java.util.ArrayList;
-
 import androidx.appcompat.app.AppCompatActivity;
-import endroad.photoquest.Data;
 import endroad.photoquest.Places.panoram.PointActivityGLES;
 import endroad.photoquest.R;
+import endroad.photoquest.data.PlaceDataSource;
 
 public class ListPlaces extends AppCompatActivity {
-	public static ArrayList<dataPlaces> place = new ArrayList<>();
+	PlaceDataSource placeDataSource;
 	AdapterListPlaces adapter;
 	ListView lvMain;
 	LocationManager locM;
@@ -56,9 +54,9 @@ public class ListPlaces extends AppCompatActivity {
 		//TODO добавить запрос разрешения на геолокацию
 		locM.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER,
 				1000, 0, locationListener);
-		place = Data.place;
+		placeDataSource = new PlaceDataSource(this);
 
-		adapter = new AdapterListPlaces(this, place);
+		adapter = new AdapterListPlaces(this, placeDataSource.getList());
 		lvMain = findViewById(R.id.lvMain);
 		lvMain.setAdapter(adapter);
 		lvMain.setOnItemClickListener(new AdapterView.OnItemClickListener() {

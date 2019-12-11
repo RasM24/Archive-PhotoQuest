@@ -14,9 +14,9 @@ import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import endroad.photoquest.Places.ListPlaces;
-import endroad.photoquest.Places.dataPlaces;
 import endroad.photoquest.Quest.ListQuest;
 import endroad.photoquest.Quest.Quest;
+import endroad.photoquest.data.PlaceDataSource;
 
 public class MainActivity extends AppCompatActivity implements OnClickListener {
 
@@ -29,6 +29,9 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 	AnimationDrawable animation;
 	ImageView img_anim;
 	LocationManager locM;
+
+	PlaceDataSource placeDataSource;
+
 	private LocationListener locationListener = new LocationListener() {
 		@Override
 		public void onLocationChanged(Location location) {
@@ -82,28 +85,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 	}
 
 	private void loadData() {
-		SharedPreferences sPref;
-		sPref = getSharedPreferences("Places", MODE_PRIVATE);
-		Data.place.clear();
-
-		Data.place.add(new dataPlaces("Дворы 1", "Двор в центре", Data.AREA_CENTR, Data.POINT_DIFF4, 56.01031335f, 92.87928364f, "point/c1/"));
-		Data.place.add(new dataPlaces("Площадь 1", "Суд вроде)", Data.AREA_CENTR, Data.POINT_DIFF2, 56.01207307f, 92.88627617f, "point/c2/"));
-		Data.place.add(new dataPlaces("Места 1", "КИЦ", Data.AREA_CENTR, Data.POINT_DIFF1, 56.010752f, 92.894623f, "point/c3/"));
-		Data.place.add(new dataPlaces("Места 2", "Почти KFC", Data.AREA_CENTR, Data.POINT_DIFF2, 56.01115317f, 92.87620894f, "point/c4/"));
-		Data.place.add(new dataPlaces("Дворы 2", "Дом", Data.AREA_CENTR, Data.POINT_DIFF4, 56.0148301f, 92.88149703f, "point/c5/"));
-		Data.place.add(new dataPlaces("Дворы 3", "Дом", Data.AREA_CENTR, Data.POINT_DIFF4, 56.00965500f, 92.88623530f, "point/c6/"));
-		Data.place.add(new dataPlaces("Места 3", "Дворец им. Ярыгина", Data.AREA_CENTR, Data.POINT_DIFF3, 55.99456135f, 92.87342037f, "point/c7/"));
-
-		Data.place.add(new dataPlaces("Места 6", "Дворец им. Ярыгина", Data.AREA_CENTR, Data.POINT_DIFF3, 56.014805f, 92.866301f, "point/c8/"));
-		Data.place.add(new dataPlaces("Дворы 4", "Дворец им. Ярыгина", Data.AREA_CENTR, Data.POINT_DIFF3, 56.01516280f, 92.85833529f, "point/c9/"));
-		Data.place.add(new dataPlaces("Дворы 5", "Дворец им. Ярыгина", Data.AREA_CENTR, Data.POINT_DIFF3, 56.01265808f, 92.855563736f, "point/c10/"));
-		Data.place.add(new dataPlaces("Места 4", "Дворец им. Ярыгина", Data.AREA_CENTR, Data.POINT_DIFF3, 56.01175705f, 92.856535f, "point/c11/"));
-		Data.place.add(new dataPlaces("Площадь 2", "Дворец им. Ярыгина", Data.AREA_CENTR, Data.POINT_DIFF3, 56.01137021f, 92.8547404f, "point/c12/"));
-		Data.place.add(new dataPlaces("Места 5", "Дворец им. Ярыгина", Data.AREA_CENTR, Data.POINT_DIFF3, 56.01154f, 92.861269f, "point/c13/"));
-
-		for (int i = 0; i < Data.place.size(); i++)
-			Data.place.get(i).opened = sPref.getBoolean(Data.place.get(i).openName, false);
-
+		placeDataSource = new PlaceDataSource(this);
 
 		Data.quest.clear();
 		Data.quest.add(new Quest(getBaseContext(), "quest/q1/"));
@@ -128,11 +110,13 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 
 			// intent = new Intent(this, LookingForActivity.class);
 
+			//TODO на кнопку "настройки" было забинден сброс открытых точек. Пересмотреть этот подход
 			case R.id.bt_setting:
 				SharedPreferences sPref = getSharedPreferences("Places", MODE_PRIVATE);
 				SharedPreferences.Editor ed = sPref.edit();
-				for (int i = 0; i < Data.place.size(); i++) {
-					ed.putBoolean(Data.place.get(i).openName, false);
+
+				for (int i = 0; i < placeDataSource.getList().size(); i++) {
+					ed.putBoolean(placeDataSource.getList().get(i).openName, false);
 				}
 				ed.apply();
 

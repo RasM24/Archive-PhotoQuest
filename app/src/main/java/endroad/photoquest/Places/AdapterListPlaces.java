@@ -9,16 +9,16 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import endroad.photoquest.R;
 
 public class AdapterListPlaces extends BaseAdapter {
 	private LayoutInflater lInflater;
-	private ArrayList<dataPlaces> data;
+	private List<DataPlaces> data;
 	private ListPlaces lp;
 
-	AdapterListPlaces(ListPlaces lp_, ArrayList<dataPlaces> data_) {
+	AdapterListPlaces(ListPlaces lp_, List<DataPlaces> data_) {
 		Context ctx = lp_.getBaseContext();
 		lp = lp_;
 		data = data_;
@@ -32,7 +32,7 @@ public class AdapterListPlaces extends BaseAdapter {
 	}
 
 	@Override
-	public dataPlaces getItem(int position) {
+	public DataPlaces getItem(int position) {
 		return data.get(position);
 	}
 

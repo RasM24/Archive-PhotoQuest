@@ -3,7 +3,7 @@ package endroad.photoquest.Places;
 import endroad.photoquest.Data;
 import endroad.photoquest.R;
 
-public class dataPlaces {
+public class DataPlaces {
 
 	public String openName;
 	public String pathTexture;
@@ -15,7 +15,7 @@ public class dataPlaces {
 	private int area;
 	private int point;
 
-	public dataPlaces(String name_, String opName_, int area_, int point_, float posX_, float posY_, String pathTexture_) {
+	public DataPlaces(String name_, String opName_, int area_, int point_, float posX_, float posY_, String pathTexture_) {
 		hiddenName = name_;
 		openName = opName_;
 		area = area_;
