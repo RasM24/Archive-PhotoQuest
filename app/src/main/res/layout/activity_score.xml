@@ -5,8 +5,7 @@
 
     <ScrollView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/scrollView2" >
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:orientation="vertical"
@@ -26,8 +25,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/region_all"
-                    android:id="@+id/tv_achiv_region_all" />
+                    android:text="@string/region_all" />
             </LinearLayout>
 
             <LinearLayout
@@ -43,8 +41,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/region_centt"
-                    android:id="@+id/tv_achiv_region_centt" />
+                    android:text="@string/region_centt" />
             </LinearLayout>
 
             <LinearLayout
@@ -60,8 +57,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/region_kirov"
-                    android:id="@+id/tv_achiv_region_kirov" />
+                    android:text="@string/region_kirov" />
             </LinearLayout>
 
             <LinearLayout
@@ -77,8 +73,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/region_lenin"
-                    android:id="@+id/tv_achiv_region_lenin" />
+                    android:text="@string/region_lenin" />
             </LinearLayout>
 
             <LinearLayout
@@ -94,8 +89,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/region_oktbr"
-                    android:id="@+id/tv_achiv_region_oktbr" />
+                    android:text="@string/region_oktbr" />
             </LinearLayout>
 
             <LinearLayout
@@ -111,8 +105,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/region_sovet"
-                    android:id="@+id/tv_achiv_region_sovet" />
+                    android:text="@string/region_sovet" />
             </LinearLayout>
 
             <LinearLayout
@@ -128,8 +121,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/region_sverdl"
-                    android:id="@+id/tv_achiv_region_sverdl" />
+                    android:text="@string/region_sverdl" />
             </LinearLayout>
 
             <LinearLayout
@@ -145,8 +137,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/region_zhelez"
-                    android:id="@+id/tv_achiv_region_zhelez" />
+                    android:text="@string/region_zhelez" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
