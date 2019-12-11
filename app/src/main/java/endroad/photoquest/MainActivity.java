@@ -15,7 +15,6 @@ import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
 import endroad.photoquest.Places.ListPlaces;
 import endroad.photoquest.Quest.ListQuest;
-import endroad.photoquest.Quest.Quest;
 import endroad.photoquest.data.PlaceDataSource;
 import endroad.photoquest.data.QuestDataSource;
 
@@ -116,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 				SharedPreferences.Editor ed = sPref.edit();
 
 				for (int i = 0; i < placeDataSource.getList().size(); i++) {
-					ed.putBoolean(placeDataSource.getList().get(i).openName, false);
+					ed.putBoolean(placeDataSource.getList().get(i).getOpenName(), false);
 				}
 				ed.apply();
 

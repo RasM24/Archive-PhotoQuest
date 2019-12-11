@@ -12,6 +12,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import endroad.photoquest.R;
+import endroad.photoquest.model.Quest;
 
 /**
  * Created by OleG on 18.01.2015.

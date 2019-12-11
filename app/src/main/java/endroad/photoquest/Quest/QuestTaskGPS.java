@@ -11,9 +11,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import endroad.photoquest.Data;
 import endroad.photoquest.R;
 import endroad.photoquest.data.QuestDataSource;
+import endroad.photoquest.model.Quest;
 
 /**
  * Created by OleG on 03.03.2015.

@@ -1,4 +1,4 @@
-package endroad.photoquest.Quest;
+package endroad.photoquest.model;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -15,12 +15,13 @@ import java.util.ArrayList;
 /**
  * Created by OleG on 11.01.2015.
  */
+//TODO разобраться с классом, перед тем как конвертировать на котлин
 public class Quest {
 
 	private static ArrayList<Task> task = new ArrayList<>();
-	int nowTaskId;
-	String questname;
-	String about;
+	public int nowTaskId;
+	public String questname;
+	public String about;
 	private Context context;
 	private String path;
 	public Quest(Context context_, String path_) {
@@ -60,15 +61,15 @@ public class Quest {
 		}
 	}
 
-	boolean complete() {
+	public boolean complete() {
 		return nowTaskId + 1 == task.size();
 	}
 
-	Task getTask() {
+	public Task getTask() {
 		return task.get(nowTaskId);
 	}
 
-	void nextTask() {
+	public void nextTask() {
 		SharedPreferences sPref = context.getSharedPreferences("quest", Context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = sPref.edit();
 		nowTaskId++;
@@ -76,7 +77,7 @@ public class Quest {
 		editor.apply();
 	}
 
-	void finish() {
+	public void finish() {
 		SharedPreferences sPref = context.getSharedPreferences("quest", Context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = sPref.edit();
 		nowTaskId = -1;
@@ -84,7 +85,7 @@ public class Quest {
 		editor.apply();
 	}
 
-	String text() {
+	public String text() {
 		InputStream is;
 		if (nowTaskId != -1) {
 			try {
@@ -109,7 +110,7 @@ public class Quest {
 		}
 	}
 
-	String textTask() {
+	public String textTask() {
 		InputStream is;
 		try {
 			is = context.getAssets().open(path + task.get(nowTaskId).pathTask);
@@ -122,7 +123,7 @@ public class Quest {
 		}
 	}
 
-	Drawable drawable() {
+	public Drawable drawable() {
 		if (nowTaskId != -1) {
 			try {
 				InputStream is;
@@ -144,7 +145,7 @@ public class Quest {
 		}
 	}
 
-	Drawable drawableSec() {
+	public Drawable drawableSec() {
 		try {
 			InputStream is;
 			is = context.getAssets().open(path + task.get(nowTaskId).pathImageSec);
@@ -155,7 +156,7 @@ public class Quest {
 		}
 	}
 
-	void re() {
+	public void re() {
 
 		SharedPreferences sPref = context.getSharedPreferences("quest", Context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = sPref.edit();
@@ -165,12 +166,12 @@ public class Quest {
 	}
 
 
-	class Reply {
+	public class Reply {
 		static final int COMPLETE = 0;
 		static final int GPS = 1;
 		static final int TEXT = 2;
 		short type;
-		double GPSX, GPSY;
+		public double GPSX, GPSY;
 		String text;
 
 		Reply(String aa) {
@@ -187,12 +188,12 @@ public class Quest {
 		}
 	}
 
-	class Task {
+	public class Task {
 		String pathImageMain;
 		String pathText;
 		String pathImageSec;
 		String pathTask;
-		Reply reply;
+		public Reply reply;
 
 	}
 }

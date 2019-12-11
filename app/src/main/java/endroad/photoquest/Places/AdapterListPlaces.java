@@ -12,13 +12,14 @@ import android.widget.TextView;
 import java.util.List;
 
 import endroad.photoquest.R;
+import endroad.photoquest.model.Place;
 
 public class AdapterListPlaces extends BaseAdapter {
 	private LayoutInflater lInflater;
-	private List<DataPlaces> data;
+	private List<Place> data;
 	private ListPlaces lp;
 
-	AdapterListPlaces(ListPlaces lp_, List<DataPlaces> data_) {
+	AdapterListPlaces(ListPlaces lp_, List<Place> data_) {
 		Context ctx = lp_.getBaseContext();
 		lp = lp_;
 		data = data_;
@@ -32,7 +33,7 @@ public class AdapterListPlaces extends BaseAdapter {
 	}
 
 	@Override
-	public DataPlaces getItem(int position) {
+	public Place getItem(int position) {
 		return data.get(position);
 	}
 
@@ -44,7 +45,7 @@ public class AdapterListPlaces extends BaseAdapter {
 			view = lInflater.inflate(R.layout.item, parent, false);
 		}
 
-		double distance = Math.sqrt(Math.pow(lp.x - getItem(position).posX, 2) + Math.pow(lp.y - getItem(position).posY, 2));
+		double distance = Math.sqrt(Math.pow(lp.x - getItem(position).getPosX(), 2) + Math.pow(lp.y - getItem(position).getPosY(), 2));
 
 		if (getItem(position).opened)
 			view.setBackgroundColor(Color.argb(200, 180, 180, 180));

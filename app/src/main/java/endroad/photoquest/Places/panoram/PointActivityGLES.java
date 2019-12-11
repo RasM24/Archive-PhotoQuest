@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import androidx.appcompat.app.AppCompatActivity;
-import endroad.photoquest.Places.DataPlaces;
+import endroad.photoquest.model.Place;
 import endroad.photoquest.R;
 import endroad.photoquest.data.PlaceDataSource;
 
@@ -29,7 +29,7 @@ import endroad.photoquest.data.PlaceDataSource;
 public class PointActivityGLES extends AppCompatActivity implements View.OnClickListener {
 
 	PlaceDataSource placeDataSource;
-	DataPlaces point;
+	Place point;
 	LocationManager gps;
 	private SurfaceView mGLSurfaceView;
 	private ImageButton bt_fullscreen;
@@ -41,7 +41,7 @@ public class PointActivityGLES extends AppCompatActivity implements View.OnClick
 		public void onLocationChanged(Location location) {
 			double x = location.getLatitude();
 			double y = location.getLongitude();
-			double distance = Math.hypot((x - point.posX), (y - point.posY));
+			double distance = Math.hypot((x - point.getPosX()), (y - point.getPosY()));
 			if ((distance < 0.00021) && (!point.opened)) //если выполняется это условие, то вы открыли точку
 			{
 				OpenPoint();
@@ -87,7 +87,7 @@ public class PointActivityGLES extends AppCompatActivity implements View.OnClick
 		try {
 			placeDataSource = new PlaceDataSource(this);
 			point = placeDataSource.getList().get(getIntent().getIntExtra("id", -1));
-			mRender.path = point.pathTexture;
+			mRender.path = point.getPathTexture();
 		} catch (Exception e) {
 			Toast t = Toast.makeText(this, e.toString(), Toast.LENGTH_LONG);
 			t.show();
@@ -103,7 +103,7 @@ public class PointActivityGLES extends AppCompatActivity implements View.OnClick
 		img_map.setOnClickListener(this);
 		img_map.setVisibility(View.INVISIBLE);
 		try {
-			InputStream ims = getAssets().open(point.pathTexture + "map.jpg");
+			InputStream ims = getAssets().open(point.getPathTexture() + "map.jpg");
 			Drawable d = Drawable.createFromStream(ims, null);
 			img_map.setImageDrawable(d);
 		} catch (IOException ex) {
@@ -179,7 +179,7 @@ public class PointActivityGLES extends AppCompatActivity implements View.OnClick
 		point.opened = true;
 		SharedPreferences sPref = getSharedPreferences("Places", MODE_PRIVATE);
 		SharedPreferences.Editor ed = sPref.edit();
-		ed.putBoolean(point.openName, true);
+		ed.putBoolean(point.getOpenName(), true);
 		ed.apply();
 
 		Animation anim = AnimationUtils.loadAnimation(this, R.anim.anim_alpha);

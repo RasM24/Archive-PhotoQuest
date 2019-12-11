@@ -1,7 +1,7 @@
 package endroad.photoquest.data
 
 import android.content.Context
-import endroad.photoquest.Quest.Quest
+import endroad.photoquest.model.Quest
 
 class QuestDataSource(context: Context) {
 
