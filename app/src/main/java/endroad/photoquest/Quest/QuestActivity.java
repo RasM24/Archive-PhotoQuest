@@ -2,7 +2,6 @@ package endroad.photoquest.Quest;
 
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.Button;
@@ -10,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
 import endroad.photoquest.Data;
 import endroad.photoquest.R;
 
@@ -19,75 +19,76 @@ import endroad.photoquest.R;
 public class QuestActivity extends AppCompatActivity implements View.OnClickListener {
 
 
-    TextView textView;
-    ImageView imgView;
-    ScrollView myScroll;
-    Button bt_next;
-    Quest quest;
+	TextView textView;
+	ImageView imgView;
+	ScrollView myScroll;
+	Button bt_next;
+	Quest quest;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_quest);
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_quest);
 
-        quest = Data.quest.get(getIntent().getIntExtra("id", -1));
+		quest = Data.quest.get(getIntent().getIntExtra("id", -1));
 
-        myScroll = (ScrollView) findViewById(R.id.scrollView);
+		myScroll = findViewById(R.id.scrollView);
 
-        textView = (TextView) findViewById(R.id.tv_quest);
-        textView.setMovementMethod(new ScrollingMovementMethod());
-        textView.setText(quest.text());
+		textView = findViewById(R.id.tv_quest);
+		textView.setMovementMethod(new ScrollingMovementMethod());
+		textView.setText(quest.text());
 
-        imgView = (ImageView) findViewById(R.id.img_quest);
-        imgView.setImageDrawable(quest.drawable());
+		imgView = findViewById(R.id.img_quest);
+		imgView.setImageDrawable(quest.drawable());
 
-        bt_next = (Button) findViewById(R.id.bt_next_task);
-        if (quest.complete())
-            bt_next.setText("Завершить");
-        else if (quest.nowTaskId == -1)
-            bt_next.setText("Заново");
-        bt_next.setOnClickListener(this);
-    }
+		bt_next = findViewById(R.id.bt_next_task);
+		if (quest.complete())
+			bt_next.setText("Завершить");
+		else if (quest.nowTaskId == -1)
+			bt_next.setText("Заново");
+		bt_next.setOnClickListener(this);
+	}
 
 
-    @Override
-    public void onClick(View v) {
-        if (quest.complete()) {
-            quest.finish();
-            textView.setText(quest.text());
-            imgView.setImageDrawable(quest.drawable());
-            bt_next.setText("Заново");
-            myScroll.scrollTo(0, 0);
+	@Override
+	public void onClick(View v) {
+		if (quest.complete()) {
+			quest.finish();
+			textView.setText(quest.text());
+			imgView.setImageDrawable(quest.drawable());
+			bt_next.setText("Заново");
+			myScroll.scrollTo(0, 0);
 
-        } else if (quest.nowTaskId == -1) {
-            quest.re();
-            textView.setText(quest.text());
-            imgView.setImageDrawable(quest.drawable());
-            bt_next.setText("Задание");
-            myScroll.scrollTo(0, 0);
+		} else if (quest.nowTaskId == -1) {
+			quest.re();
+			textView.setText(quest.text());
+			imgView.setImageDrawable(quest.drawable());
+			bt_next.setText("Задание");
+			myScroll.scrollTo(0, 0);
 
-        } else {
-            Intent intent = new Intent(this, QuestTaskGPS.class);
-            intent.putExtra("id", getIntent().getIntExtra("id", -1));
-            startActivityForResult(intent, 1);
-        }
-    }
+		} else {
+			Intent intent = new Intent(this, QuestTaskGPS.class);
+			intent.putExtra("id", getIntent().getIntExtra("id", -1));
+			startActivityForResult(intent, 1);
+		}
+	}
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (data == null) {
-            return;
-        }
-        if (data.getBooleanExtra("finish", false))
-            taskComplete();
-    }
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (data == null) {
+			return;
+		}
+		if (data.getBooleanExtra("finish", false))
+			taskComplete();
+		super.onActivityResult(requestCode, resultCode, data);
+	}
 
-    void taskComplete() {
-        quest.nextTask();
-        textView.setText(quest.text());
-        imgView.setImageDrawable(quest.drawable());
-        if (quest.complete())
-            bt_next.setText("Завершить");
-        myScroll.scrollTo(0, 0);
-    }
+	void taskComplete() {
+		quest.nextTask();
+		textView.setText(quest.text());
+		imgView.setImageDrawable(quest.drawable());
+		if (quest.complete())
+			bt_next.setText("Завершить");
+		myScroll.scrollTo(0, 0);
+	}
 }

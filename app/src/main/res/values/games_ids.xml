@@ -1,13 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <resources>
-    <string name="app_id">745662680808</string>
-    <string name="achievement__kirov">CgkI6J3W59kVEAIQAQ</string>
-    <string name="achievement__lenin">CgkI6J3W59kVEAIQAg</string>
-    <string name="achievement__zhelez">CgkI6J3W59kVEAIQAw</string>
-    <string name="achievement__centr">CgkI6J3W59kVEAIQBA</string>
-    <string name="achievement_oktbr">CgkI6J3W59kVEAIQBQ</string>
-    <string name="achievement_sverdlov">CgkI6J3W59kVEAIQBg</string>
-    <string name="achievement__sovet">CgkI6J3W59kVEAIQBw</string>
-    <string name="leaderboard_1_main">CgkI6J3W59kVEAIQCA</string>
+	<string name="app_id">745662680808</string>
 </resources>
