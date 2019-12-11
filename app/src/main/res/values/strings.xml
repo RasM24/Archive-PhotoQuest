@@ -8,6 +8,5 @@
     <string name="bt_quest">Квест</string>
     <string name="bt_exit">Выход</string>
     <string name="bt_quest_task">Задание</string>
-    <string name="title_activity_maps">Map</string>
 
 </resources>
