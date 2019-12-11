@@ -13,6 +13,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import endroad.photoquest.Data;
 import endroad.photoquest.R;
+import endroad.photoquest.data.QuestDataSource;
 
 /**
  * Created by OleG on 03.03.2015.
@@ -24,6 +25,7 @@ public class QuestTaskGPS extends AppCompatActivity implements View.OnClickListe
 	ImageView img;
 	Quest quest;
 	LocationManager locM;
+	QuestDataSource questDataSource;
 	LocationListener locationListener = new LocationListener() {
 		@Override
 		public void onLocationChanged(Location location) {
@@ -60,7 +62,8 @@ public class QuestTaskGPS extends AppCompatActivity implements View.OnClickListe
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.quest_task_gps);
-		quest = Data.quest.get(getIntent().getIntExtra("id", -1));
+		questDataSource = new QuestDataSource(this);
+		quest = questDataSource.getList().get(getIntent().getIntExtra("id", -1));
 		textView = findViewById(R.id.tv_quest_gps);
 		bt_reply = findViewById(R.id.bt_reply);
 		img = findViewById(R.id.img_quest_gps);

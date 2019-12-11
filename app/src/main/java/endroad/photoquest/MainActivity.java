@@ -17,6 +17,7 @@ import endroad.photoquest.Places.ListPlaces;
 import endroad.photoquest.Quest.ListQuest;
 import endroad.photoquest.Quest.Quest;
 import endroad.photoquest.data.PlaceDataSource;
+import endroad.photoquest.data.QuestDataSource;
 
 public class MainActivity extends AppCompatActivity implements OnClickListener {
 
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 	LocationManager locM;
 
 	PlaceDataSource placeDataSource;
+	QuestDataSource questDataSource;
 
 	private LocationListener locationListener = new LocationListener() {
 		@Override
@@ -86,9 +88,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 
 	private void loadData() {
 		placeDataSource = new PlaceDataSource(this);
-
-		Data.quest.clear();
-		Data.quest.add(new Quest(getBaseContext(), "quest/q1/"));
+		questDataSource = new QuestDataSource(this);
 	}
 
 	@Override

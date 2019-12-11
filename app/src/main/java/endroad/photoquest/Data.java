@@ -1,9 +1,5 @@
 package endroad.photoquest;
 
-import java.util.ArrayList;
-
-import endroad.photoquest.Quest.Quest;
-
 /**
  * Created by OleG on 20.11.2014.
  * p.s. я аккуратно =)
@@ -34,6 +30,4 @@ public class Data {
 	public final static String PLACE_DIFF2 = "Норм так";
 	public final static String PLACE_DIFF3 = "Попотей";
 	public final static String PLACE_DIFF4 = "Хер найдешь";
-
-	public static ArrayList<Quest> quest = new ArrayList<>();
 }
