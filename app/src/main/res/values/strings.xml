@@ -10,6 +10,4 @@
     <string name="bt_quest_task">Задание</string>
     <string name="title_activity_maps">Map</string>
 
-	<string name="title_activity_google_play_services">GooglePlayServicesActivity</string>
-
 </resources>
