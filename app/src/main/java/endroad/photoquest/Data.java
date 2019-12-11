@@ -36,6 +36,6 @@ public class Data {
     public final static String PLACE_DIFF3 = "Попотей";
     public final static String PLACE_DIFF4 = "Хер найдешь";
 
-    public static ArrayList<dataPlaces> place = new ArrayList<dataPlaces>();
-    public static ArrayList<Quest> quest = new ArrayList<Quest>();
+    public static ArrayList<dataPlaces> place = new ArrayList<>();
+    public static ArrayList<Quest> quest = new ArrayList<>();
 }

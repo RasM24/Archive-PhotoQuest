@@ -7,9 +7,9 @@ import java.io.InputStreamReader;
 
 import android.content.Context;
 
-public class RawResourceReader {
-    public static String readTextFileFromRawResource(final Context context,
-                                                     final int resourceId) {
+class RawResourceReader {
+    static String readTextFileFromRawResource(final Context context,
+                                              final int resourceId) {
         final InputStream inputStream = context.getResources().openRawResource(
                 resourceId);
         final InputStreamReader inputStreamReader = new InputStreamReader(

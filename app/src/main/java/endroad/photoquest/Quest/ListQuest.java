@@ -18,7 +18,7 @@ import endroad.photoquest.R;
 public class ListQuest extends AppCompatActivity {
     AdapterQuestPlaces adapter;
     ListView lvMain;
-    public static ArrayList<Quest> quest = new ArrayList<Quest>();
+    public static ArrayList<Quest> quest = new ArrayList<>();
 
     /**
      * Called when the activity is first created.
@@ -30,7 +30,7 @@ public class ListQuest extends AppCompatActivity {
         quest = Data.quest;
 
         adapter = new AdapterQuestPlaces(this, quest);
-        lvMain = (ListView) findViewById(R.id.lvMain);
+        lvMain = findViewById(R.id.lvMain);
         lvMain.setAdapter(adapter);
         lvMain.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,

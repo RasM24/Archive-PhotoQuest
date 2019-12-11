@@ -2,8 +2,7 @@ package endroad.photoquest.Places.panoram;
 
 import android.opengl.GLES20;
 
-public class ShaderHelper {
-    private static final String TAG = "ShaderHelper";
+class ShaderHelper {
 
     /**
      * Helper function to compile a shader.
@@ -12,7 +11,7 @@ public class ShaderHelper {
      * @param shaderSource The shader source code.
      * @return An OpenGL handle to the shader.
      */
-    public static int compileShader(final int shaderType, final String shaderSource) {
+    static int compileShader(final int shaderType, final String shaderSource) {
         int shaderHandle = GLES20.glCreateShader(shaderType);
 
         if (shaderHandle != 0) {
@@ -48,7 +47,7 @@ public class ShaderHelper {
      * @param attributes           Attributes that need to be bound to the program.
      * @return An OpenGL handle to the program.
      */
-    public static int createAndLinkProgram(final int vertexShaderHandle, final int fragmentShaderHandle, final String[] attributes) {
+    static int createAndLinkProgram(final int vertexShaderHandle, final int fragmentShaderHandle, final String[] attributes) {
         int programHandle = GLES20.glCreateProgram();
 
         if (programHandle != 0) {

@@ -18,21 +18,19 @@ import java.util.ArrayList;
  */
 public class Quest {
 
-    public static ArrayList<Task> task = new ArrayList<Task>();
-    public int nowTaskId;
+    private static ArrayList<Task> task = new ArrayList<>();
+    int nowTaskId;
 
-    public boolean complete() {
-        if (nowTaskId + 1 == task.size())
-            return true;
-        else return false;
+    boolean complete() {
+        return nowTaskId + 1 == task.size();
     }
 
-    Context context;
+    private Context context;
     String questname;
     String about;
-    String path;
+    private String path;
 
-    public Task getTask() {
+    Task getTask() {
         return task.get(nowTaskId);
     }
 
@@ -59,9 +57,9 @@ public class Quest {
             }
             in.close();
         } catch (FileNotFoundException e) {
-            // FileNotFoundExpeption
+            // FileNotFoundExcpeption
         } catch (IOException e) {
-            // IOExeption
+            // IOException
         }
     }
 
@@ -70,7 +68,7 @@ public class Quest {
         SharedPreferences.Editor editor = sPref.edit();
         nowTaskId++;
         editor.putInt(path, nowTaskId);
-        editor.commit();
+        editor.apply();
     }
 
     void finish() {
@@ -78,7 +76,7 @@ public class Quest {
         SharedPreferences.Editor editor = sPref.edit();
         nowTaskId = -1;
         editor.putInt(path, nowTaskId);
-        editor.commit();
+        editor.apply();
     }
 
     String text() {
@@ -119,7 +117,7 @@ public class Quest {
         }
     }
 
-    public static String convertStreamToString(InputStream is) {
+    private static String convertStreamToString(InputStream is) {
         try {
             return new java.util.Scanner(is).useDelimiter("\\A").next();
         } catch (java.util.NoSuchElementException e) {
@@ -132,8 +130,7 @@ public class Quest {
             try {
                 InputStream is;
                 is = context.getAssets().open(path + task.get(nowTaskId).pathImageMain);
-                Drawable d = Drawable.createFromStream(is, null);
-                return d;
+                return Drawable.createFromStream(is, null);
             } catch (IOException e) {
                 e.printStackTrace();
                 return null;
@@ -142,8 +139,7 @@ public class Quest {
             try {
                 InputStream is;
                 is = context.getAssets().open(path + "final");
-                Drawable d = Drawable.createFromStream(is, null);
-                return d;
+                return Drawable.createFromStream(is, null);
             } catch (IOException e) {
                 e.printStackTrace();
                 return null;
@@ -155,21 +151,20 @@ public class Quest {
         try {
             InputStream is;
             is = context.getAssets().open(path + task.get(nowTaskId).pathImageSec);
-            Drawable d = Drawable.createFromStream(is, null);
-            return d;
+            return Drawable.createFromStream(is, null);
         } catch (IOException e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    public void re() {
+    void re() {
 
         SharedPreferences sPref = context.getSharedPreferences("quest", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sPref.edit();
         nowTaskId = 0;
         editor.putInt(path, nowTaskId);
-        editor.commit();
+        editor.apply();
     }
 
 

@@ -14,13 +14,12 @@ import android.widget.TextView;
 import endroad.photoquest.R;
 
 public class AdapterListPlaces extends BaseAdapter {
-    Context ctx;
-    LayoutInflater lInflater;
-    ArrayList<dataPlaces> data;
-    ListPlaces lp;
+    private LayoutInflater lInflater;
+    private ArrayList<dataPlaces> data;
+    private ListPlaces lp;
 
     AdapterListPlaces(ListPlaces lp_, ArrayList<dataPlaces> data_) {
-        ctx = lp_.getBaseContext();
+        Context ctx = lp_.getBaseContext();
         lp = lp_;
         data = data_;
         lInflater = (LayoutInflater) ctx
@@ -45,7 +44,7 @@ public class AdapterListPlaces extends BaseAdapter {
             view = lInflater.inflate(R.layout.item, parent, false);
         }
 
-        double distan = Math.sqrt(Math.pow(lp.x - getItem(position).posX, 2) + Math.pow(lp.y - getItem(position).posY, 2));
+        double distance = Math.sqrt(Math.pow(lp.x - getItem(position).posX, 2) + Math.pow(lp.y - getItem(position).posY, 2));
 
         if (getItem(position).opened)
             view.setBackgroundColor(Color.argb(200, 180, 180, 180));
@@ -53,7 +52,7 @@ public class AdapterListPlaces extends BaseAdapter {
             view.setBackgroundColor(Color.argb(200, 255, 255, 255));
 
         ((ImageView) view.findViewById(R.id.ivDist))
-                .setImageResource(getItem(position).getIdRes(distan));
+                .setImageResource(getItem(position).getIdRes(distance));
 
 
         ((TextView) view.findViewById(R.id.tvPlaceAbout))

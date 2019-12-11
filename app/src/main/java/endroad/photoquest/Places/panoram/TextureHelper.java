@@ -43,7 +43,7 @@ public class TextureHelper {
         return textureHandle[0];
     }
 
-    public static int loadTexture(final Context context, String path) {
+    static int loadTexture(final Context context, String path) {
         final int[] textureHandle = new int[1];
 
         GLES20.glGenTextures(1, textureHandle, 0);

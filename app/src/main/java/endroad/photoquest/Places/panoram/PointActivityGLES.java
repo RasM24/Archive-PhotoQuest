@@ -29,7 +29,6 @@ import endroad.photoquest.R;
 public class PointActivityGLES extends AppCompatActivity implements View.OnClickListener {
 
     private SurfaceView mGLSurfaceView;
-    private Render mRender;
     private ImageButton bt_fullscreen;
     private ImageButton bt_map;
     private ImageButton bt_open_catch;
@@ -52,9 +51,9 @@ public class PointActivityGLES extends AppCompatActivity implements View.OnClick
 
 
         setContentView(R.layout.activity_point1);
-        mGLSurfaceView = (SurfaceView) findViewById(R.id.gl_surface_view);
+        mGLSurfaceView = findViewById(R.id.gl_surface_view);
         mGLSurfaceView.setEGLContextClientVersion(2);
-        mRender = new Render(this);
+        Render mRender = new Render(this);
         mGLSurfaceView.setRenderer(mRender);
 
         try {
@@ -65,13 +64,13 @@ public class PointActivityGLES extends AppCompatActivity implements View.OnClick
             t.show();
             finish();
         }
-        bt_fullscreen = (ImageButton) findViewById(R.id.bt_point_fullscreen);
+        bt_fullscreen = findViewById(R.id.bt_point_fullscreen);
         bt_fullscreen.setOnClickListener(this);
 
-        bt_map = (ImageButton) findViewById(R.id.bt_map_img);
+        bt_map = findViewById(R.id.bt_map_img);
         bt_map.setOnClickListener(this);
 
-        img_map = (ImageButton) findViewById(R.id.map_img);
+        img_map = findViewById(R.id.map_img);
         img_map.setOnClickListener(this);
         img_map.setVisibility(View.INVISIBLE);
         try {
@@ -83,13 +82,14 @@ public class PointActivityGLES extends AppCompatActivity implements View.OnClick
             return;
         }
 
-        bt_open_catch = (ImageButton) findViewById(R.id.bt_open_img);
+        bt_open_catch = findViewById(R.id.bt_open_img);
         bt_open_catch.setVisibility(View.INVISIBLE);
         bt_open_catch.setBackgroundColor(Color.TRANSPARENT);
         bt_open_catch.setImageResource(R.drawable.test);
         bt_open_catch.setOnClickListener(this);
 
         gps = (LocationManager) getSystemService(LOCATION_SERVICE);
+        //TODO добавить запрос разрешения на геолокацию
         gps.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER,
                 1000, 0, locationListener);
     }
@@ -129,12 +129,12 @@ public class PointActivityGLES extends AppCompatActivity implements View.OnClick
         public void onLocationChanged(Location location) {
             double x = location.getLatitude();
             double y = location.getLongitude();
-            double distan = Math.hypot((x - point.posX), (y - point.posY));
-            if ((distan < 0.00021) && (!point.opened)) //если выполняется это условие, то вы открыли точку
+            double distance = Math.hypot((x - point.posX), (y - point.posY));
+            if ((distance < 0.00021) && (!point.opened)) //если выполняется это условие, то вы открыли точку
             {
                 OpenPoint();
             } else
-                bt_map.setImageResource(point.getIdRes(distan));
+                bt_map.setImageResource(point.getIdRes(distance));
         }
 
         @Override
@@ -182,7 +182,7 @@ public class PointActivityGLES extends AppCompatActivity implements View.OnClick
         SharedPreferences sPref = getSharedPreferences("Places", MODE_PRIVATE);
         SharedPreferences.Editor ed = sPref.edit();
         ed.putBoolean(point.openName, true);
-        ed.commit();
+        ed.apply();
 
         Animation anim = AnimationUtils.loadAnimation(this, R.anim.anim_alpha);
         bt_open_catch.startAnimation(anim);

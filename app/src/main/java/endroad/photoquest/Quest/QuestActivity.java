@@ -32,16 +32,16 @@ public class QuestActivity extends AppCompatActivity implements View.OnClickList
 
         quest = Data.quest.get(getIntent().getIntExtra("id", -1));
 
-        myScroll = (ScrollView) findViewById(R.id.scrollView);
+        myScroll = findViewById(R.id.scrollView);
 
-        textView = (TextView) findViewById(R.id.tv_quest);
+        textView = findViewById(R.id.tv_quest);
         textView.setMovementMethod(new ScrollingMovementMethod());
         textView.setText(quest.text());
 
-        imgView = (ImageView) findViewById(R.id.img_quest);
+        imgView = findViewById(R.id.img_quest);
         imgView.setImageDrawable(quest.drawable());
 
-        bt_next = (Button) findViewById(R.id.bt_next_task);
+        bt_next = findViewById(R.id.bt_next_task);
         if (quest.complete())
             bt_next.setText("Завершить");
         else if (quest.nowTaskId == -1)
@@ -80,6 +80,7 @@ public class QuestActivity extends AppCompatActivity implements View.OnClickList
         }
         if (data.getBooleanExtra("finish", false))
             taskComplete();
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     void taskComplete() {

@@ -30,13 +30,14 @@ public class QuestTaskGPS extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.quest_task_gps);
         quest = Data.quest.get(getIntent().getIntExtra("id", -1));
-        textView = (TextView) findViewById(R.id.tv_quest_gps);
-        bt_reply = (Button) findViewById(R.id.bt_reply);
-        img = (ImageView) findViewById(R.id.img_quest_gps);
+        textView = findViewById(R.id.tv_quest_gps);
+        bt_reply = findViewById(R.id.bt_reply);
+        img = findViewById(R.id.img_quest_gps);
         textView.setText(quest.textTask());
         img.setImageDrawable(quest.drawableSec());
         bt_reply.setOnClickListener(this);
         locM = (LocationManager) getSystemService(LOCATION_SERVICE);
+        //TODO добавить запрос разрешения на геолокацию
         locM.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER,
                 1000, 0, locationListener);
     }
@@ -46,8 +47,8 @@ public class QuestTaskGPS extends AppCompatActivity implements View.OnClickListe
         public void onLocationChanged(Location location) {
             double x = location.getLatitude();
             double y = location.getLongitude();
-            double distan = Math.hypot((x - quest.getTask().reply.GPSX), (y - quest.getTask().reply.GPSY));
-            if (distan < 0.0003) //если выполняется это условие, то вы открыли точку
+            double distance = Math.hypot((x - quest.getTask().reply.GPSX), (y - quest.getTask().reply.GPSY));
+            if (distance < 0.0003) //если выполняется это условие, то вы открыли точку
             {
                 Intent intent = new Intent();
                 intent.putExtra("finish", true);

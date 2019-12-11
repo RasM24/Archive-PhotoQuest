@@ -21,7 +21,7 @@ public class ListPlaces extends AppCompatActivity {
     ListView lvMain;
     LocationManager locM;
     double x, y;
-    public static ArrayList<dataPlaces> place = new ArrayList<dataPlaces>();
+    public static ArrayList<dataPlaces> place = new ArrayList<>();
 
     /**
      * Called when the activity is first created.
@@ -30,12 +30,13 @@ public class ListPlaces extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.listplaces);
         locM = (LocationManager) getSystemService(LOCATION_SERVICE);
+        //TODO добавить запрос разрешения на геолокацию
         locM.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER,
                 1000, 0, locationListener);
         place = Data.place;
 
         adapter = new AdapterListPlaces(this, place);
-        lvMain = (ListView) findViewById(R.id.lvMain);
+        lvMain = findViewById(R.id.lvMain);
         lvMain.setAdapter(adapter);
         lvMain.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,

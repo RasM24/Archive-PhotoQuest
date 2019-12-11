@@ -73,34 +73,9 @@ public class Render implements GLSurfaceView.Renderer {
     private int mMVMatrixHandle;
 
     /**
-     * This will be used to pass in the texture.
-     */
-    private int mTextureUniformHandle;
-
-    /**
      * This will be used to pass in model position information.
      */
     private int mPositionHandle;
-
-    /**
-     * This will be used to pass in model texture coordinate information.
-     */
-    private int mTextureCoordinateHandle;
-
-    /**
-     * How many bytes per float.
-     */
-    private final int mBytesPerFloat = 4;
-
-    /**
-     * Size of the position data in elements.
-     */
-    private final int mPositionDataSize = 3;
-
-    /**
-     * Size of the texture coordinate data in elements.
-     */
-    private final int mTextureCoordinateDataSize = 2;
 
     /**
      * This is a handle to our cube shading program.
@@ -120,16 +95,16 @@ public class Render implements GLSurfaceView.Renderer {
     //float mDeltaX;
     //float mDeltaY;
 
-    float vision_fi = 0f; // азимутальный угол камеры
-    float vision_psy = 0f; // зенитный угол камеры
-    public String path;
+    private float vision_fi = 0f; // азимутальный угол камеры
+    private float vision_psy = 0f; // зенитный угол камеры
+    String path;
     float zoom = 10;
-    float ratio_;
+    private float ratio_;
 
     /**
      * Initialize the model data.
      */
-    public Render(final Context activityContext) {
+    Render(final Context activityContext) {
         mActivityContext = activityContext;
 
         // X, Y, Z
@@ -242,6 +217,8 @@ public class Render implements GLSurfaceView.Renderer {
                 };
 
         // Initialize the buffers.
+
+        int mBytesPerFloat = 4; //How many bytes per float.
         mCubePositions = ByteBuffer.allocateDirect(cubePositionData.length * mBytesPerFloat)
                 .order(ByteOrder.nativeOrder()).asFloatBuffer();
         mCubePositions.put(cubePositionData).position(0);
@@ -328,7 +305,7 @@ public class Render implements GLSurfaceView.Renderer {
         Matrix.frustumM(mProjectionMatrix, 0, -ratio / 10, ratio / 10, -0.1f, 0.1f, 1f/zoom, 5.0f);
     }
 
-    public void zoom(float aa) {
+    void zoom(float aa) {
             zoom = aa;
             Matrix.frustumM(mProjectionMatrix, 0, -ratio_ / 10, ratio_ / 10, -0.1f, 0.1f, 1f / zoom, 5.0f);
 
@@ -346,9 +323,9 @@ public class Render implements GLSurfaceView.Renderer {
         // Set program handles for cube drawing.
         mMVPMatrixHandle = GLES20.glGetUniformLocation(mProgramHandle, "u_MVPMatrix");
         mMVMatrixHandle = GLES20.glGetUniformLocation(mProgramHandle, "u_MVMatrix");
-        mTextureUniformHandle = GLES20.glGetUniformLocation(mProgramHandle, "u_Texture");
+        int mTextureUniformHandle = GLES20.glGetUniformLocation(mProgramHandle, "u_Texture"); // This will be used to pass in the texture.
         mPositionHandle = GLES20.glGetAttribLocation(mProgramHandle, "a_Position");
-        mTextureCoordinateHandle = GLES20.glGetAttribLocation(mProgramHandle, "a_TexCoordinate");
+        int mTextureCoordinateHandle = GLES20.glGetAttribLocation(mProgramHandle, "a_TexCoordinate"); //  This will be used to pass in model texture coordinate information.
 
         // Draw a cube.
         // Translate the cube into the screen.
@@ -378,8 +355,10 @@ public class Render implements GLSurfaceView.Renderer {
 
         // Pass in the texture coordinate information
         mCubeTextureCoordinates.position(0);
+
+        int mTextureCoordinateDataSize = 2;
         GLES20.glVertexAttribPointer(mTextureCoordinateHandle, mTextureCoordinateDataSize, GLES20.GL_FLOAT, false,
-                0, mCubeTextureCoordinates);
+                0, mCubeTextureCoordinates); // Size of the texture coordinate data in elements.
 
         GLES20.glEnableVertexAttribArray(mTextureCoordinateHandle);
 
@@ -388,7 +367,7 @@ public class Render implements GLSurfaceView.Renderer {
 
     }
 
-    public void turnVision(float _dfi, float _dpsy) {
+    void turnVision(float _dfi, float _dpsy) {
         vision_fi += _dfi;
         vision_psy += _dpsy;
         if (vision_psy > 1.5f) {
@@ -405,8 +384,10 @@ public class Render implements GLSurfaceView.Renderer {
     private void drawCube() {
         // Pass in the position information
         mCubePositions.position(0);
+
+        int mPositionDataSize = 3;
         GLES20.glVertexAttribPointer(mPositionHandle, mPositionDataSize, GLES20.GL_FLOAT, false,
-                0, mCubePositions);
+                0, mCubePositions); // Size of the position data in elements.
 
         GLES20.glEnableVertexAttribArray(mPositionHandle);
 

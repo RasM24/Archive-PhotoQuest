@@ -35,11 +35,11 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        bt_place = (Button) findViewById(R.id.bt_place);
-        bt_achiv = (Button) findViewById(R.id.bt_achiv);
-        bt_quest = (Button) findViewById(R.id.bt_quest);
-        bt_setting = (Button) findViewById(R.id.bt_setting);
-        bt_exit = (Button) findViewById(R.id.bt_exit);
+        bt_place = findViewById(R.id.bt_place);
+        bt_achiv = findViewById(R.id.bt_achiv);
+        bt_quest = findViewById(R.id.bt_quest);
+        bt_setting = findViewById(R.id.bt_setting);
+        bt_exit = findViewById(R.id.bt_exit);
 
         bt_place.setOnClickListener(this);
         bt_achiv.setOnClickListener(this);
@@ -47,13 +47,14 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         bt_setting.setOnClickListener(this);
         bt_exit.setOnClickListener(this);
 
-        img_anim = (ImageView)findViewById(R.id.img_animation);
+        img_anim = findViewById(R.id.img_animation);
         //img_anim.setBackgroundResource(R.drawable.fontan);
         animation = (AnimationDrawable) img_anim.getBackground();
         //animation.setOneShot(false);
         animation.start();
 
         locM = (LocationManager) getSystemService(LOCATION_SERVICE);
+        //TODO добавить запрос разрешения на геолокацию
         locM.requestLocationUpdates(LocationManager.GPS_PROVIDER,
                 1000, 0, locationListener);
         loadData();
@@ -112,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                 for (int i = 0; i < Data.place.size(); i++) {
                     ed.putBoolean(Data.place.get(i).openName, false);
                 }
-                ed.commit();
+                ed.apply();
 
                 break;
             case R.id.bt_exit:

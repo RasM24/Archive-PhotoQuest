@@ -87,7 +87,7 @@ public class dataPlaces {
 
     public double posX;
     public double posY;
-    int point;
+    private int point;
 
     public boolean opened;
 

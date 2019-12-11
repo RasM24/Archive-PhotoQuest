@@ -2,11 +2,8 @@ package endroad.photoquest.Places.panoram;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
-import android.provider.Settings;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-
-import java.util.Date;
 
 public class SurfaceView extends GLSurfaceView {
     private Render mRenderer;

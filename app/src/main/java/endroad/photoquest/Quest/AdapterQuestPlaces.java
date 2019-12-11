@@ -18,14 +18,11 @@ import endroad.photoquest.R;
  */
 public class AdapterQuestPlaces extends BaseAdapter {
 
-    Context ctx;
-    LayoutInflater lInflater;
-    ArrayList<Quest> data;
-    ListQuest lp;
+    private LayoutInflater lInflater;
+    private ArrayList<Quest> data;
 
     AdapterQuestPlaces(ListQuest lp_, ArrayList<Quest> data_) {
-        ctx = lp_.getBaseContext();
-        lp = lp_;
+        Context ctx = lp_.getBaseContext();
         data = data_;
         lInflater = (LayoutInflater) ctx
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
