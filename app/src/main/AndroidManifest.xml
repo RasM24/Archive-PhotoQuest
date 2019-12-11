@@ -41,9 +41,8 @@
         <activity android:name=".Places.panoram.PointActivityGLES" />
         <activity android:name=".Quest.QuestActivity" />
         <activity android:name=".Quest.QuestTaskGPS" />
-        <activity android:name=".ScoreActivity" />
 
-        <meta-data
+		<meta-data
             android:name="com.google.android.gms.games.APP_ID"
             android:value="@string/app_id" />
         <meta-data
