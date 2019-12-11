@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">CityQuest</string>
-    <string name="bt_map">Достижения</string>
-    <string name="bt_point">Места</string>
-    <string name="bt_setting">Настройки</string>
-    <string name="bt_quest">Квест</string>
-    <string name="bt_exit">Выход</string>
-    <string name="bt_quest_task">Задание</string>
+	<string name="app_name">CityQuest</string>
+	<string name="bt_map">Достижения</string>
+	<string name="bt_point">Места</string>
+	<string name="bt_setting">Настройки</string>
+	<string name="bt_quest">Квест</string>
+	<string name="bt_exit">Выход</string>
+	<string name="bt_quest_task">Задание</string>
 
 </resources>

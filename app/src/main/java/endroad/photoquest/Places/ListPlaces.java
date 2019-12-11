@@ -17,65 +17,63 @@ import endroad.photoquest.Places.panoram.PointActivityGLES;
 import endroad.photoquest.R;
 
 public class ListPlaces extends AppCompatActivity {
-    AdapterListPlaces adapter;
-    ListView lvMain;
-    LocationManager locM;
-    double x, y;
-    public static ArrayList<dataPlaces> place = new ArrayList<>();
+	public static ArrayList<dataPlaces> place = new ArrayList<>();
+	AdapterListPlaces adapter;
+	ListView lvMain;
+	LocationManager locM;
+	double x, y;
+	private LocationListener locationListener = new LocationListener() {
+		@Override
+		public void onLocationChanged(Location location) {
+			x = location.getLatitude();
+			y = location.getLongitude();
+			adapter.notifyDataSetChanged();
+		}
 
-    /**
-     * Called when the activity is first created.
-     */
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.listplaces);
-        locM = (LocationManager) getSystemService(LOCATION_SERVICE);
-        //TODO добавить запрос разрешения на геолокацию
-        locM.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER,
-                1000, 0, locationListener);
-        place = Data.place;
+		@Override
+		public void onStatusChanged(String s, int i, Bundle bundle) {
 
-        adapter = new AdapterListPlaces(this, place);
-        lvMain = findViewById(R.id.lvMain);
-        lvMain.setAdapter(adapter);
-        lvMain.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-                Intent intent = new Intent(getApplication().getBaseContext(), PointActivityGLES.class);
-                intent.putExtra("id", position);
-                startActivity(intent);
-            }
-        });
-    }
+		}
 
+		@Override
+		public void onProviderEnabled(String s) {
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        adapter.notifyDataSetChanged();
-    }
+		}
 
-    private LocationListener locationListener = new LocationListener() {
-        @Override
-        public void onLocationChanged(Location location) {
-            x = location.getLatitude();
-            y = location.getLongitude();
-            adapter.notifyDataSetChanged();
-        }
+		@Override
+		public void onProviderDisabled(String s) {
 
-        @Override
-        public void onStatusChanged(String s, int i, Bundle bundle) {
+		}
+	};
 
-        }
+	/**
+	 * Called when the activity is first created.
+	 */
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.listplaces);
+		locM = (LocationManager) getSystemService(LOCATION_SERVICE);
+		//TODO добавить запрос разрешения на геолокацию
+		locM.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER,
+				1000, 0, locationListener);
+		place = Data.place;
 
-        @Override
-        public void onProviderEnabled(String s) {
+		adapter = new AdapterListPlaces(this, place);
+		lvMain = findViewById(R.id.lvMain);
+		lvMain.setAdapter(adapter);
+		lvMain.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			public void onItemClick(AdapterView<?> parent, View view,
+									int position, long id) {
+				Intent intent = new Intent(getApplication().getBaseContext(), PointActivityGLES.class);
+				intent.putExtra("id", position);
+				startActivity(intent);
+			}
+		});
+	}
 
-        }
-
-        @Override
-        public void onProviderDisabled(String s) {
-
-        }
-    };
+	@Override
+	protected void onResume() {
+		super.onResume();
+		adapter.notifyDataSetChanged();
+	}
 }

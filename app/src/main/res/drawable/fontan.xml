@@ -1,13 +1,33 @@
 <animation-list xmlns:android="http://schemas.android.com/apk/res/android"
-	android:oneshot="false" >
-    <item android:drawable="@drawable/fontan2" android:duration="60"/>
-    <item android:drawable="@drawable/fontan3" android:duration="60"/>
-    <item android:drawable="@drawable/fontan4" android:duration="60"/>
-    <item android:drawable="@drawable/fontan5" android:duration="60"/>
-    <item android:drawable="@drawable/fontan6" android:duration="60"/>
-    <item android:drawable="@drawable/fontan7" android:duration="60"/>
-    <item android:drawable="@drawable/fontan8" android:duration="60"/>
-    <item android:drawable="@drawable/fontan9" android:duration="60"/>
-    <item android:drawable="@drawable/fontan10" android:duration="60"/>
-    <item android:drawable="@drawable/fontan11" android:duration="60"/>
-    </animation-list >
+	android:oneshot="false">
+	<item
+		android:drawable="@drawable/fontan2"
+		android:duration="60" />
+	<item
+		android:drawable="@drawable/fontan3"
+		android:duration="60" />
+	<item
+		android:drawable="@drawable/fontan4"
+		android:duration="60" />
+	<item
+		android:drawable="@drawable/fontan5"
+		android:duration="60" />
+	<item
+		android:drawable="@drawable/fontan6"
+		android:duration="60" />
+	<item
+		android:drawable="@drawable/fontan7"
+		android:duration="60" />
+	<item
+		android:drawable="@drawable/fontan8"
+		android:duration="60" />
+	<item
+		android:drawable="@drawable/fontan9"
+		android:duration="60" />
+	<item
+		android:drawable="@drawable/fontan10"
+		android:duration="60" />
+	<item
+		android:drawable="@drawable/fontan11"
+		android:duration="60" />
+</animation-list>
