@@ -1,7 +1,6 @@
 package endroad.photoquest.model
 
-import endroad.photoquest.Data
-import endroad.photoquest.R
+import endroad.photoquest.*
 
 class Place(private val hiddenName: String,
 			val openName: String, //public int id;
@@ -21,24 +20,24 @@ class Place(private val hiddenName: String,
 
 	fun nameDiff(): String? {
 		return if (opened) "открыта" else when (point) {
-			Data.POINT_DIFF1 -> Data.PLACE_DIFF1
-			Data.POINT_DIFF2 -> Data.PLACE_DIFF2
-			Data.POINT_DIFF3 -> Data.PLACE_DIFF3
-			Data.POINT_DIFF4 -> Data.PLACE_DIFF4
-			else             -> null
+			POINT_DIFF1 -> PLACE_DIFF1
+			POINT_DIFF2 -> PLACE_DIFF2
+			POINT_DIFF3 -> PLACE_DIFF3
+			POINT_DIFF4 -> PLACE_DIFF4
+			else        -> null
 		}
 	}
 
 	fun getArea(): Int {
 		return if (!opened) area else when (area) {
-			Data.AREA_CENTR -> Data.AREA_CENTR_O
-			Data.AREA_KIROV -> Data.AREA_KIROV_O
-			Data.AREA_LENIN -> Data.AREA_LENIN_O
-			Data.AREA_OKTYB -> Data.AREA_OKTYB_O
-			Data.AREA_SOVET -> Data.AREA_SOVET_O
-			Data.AREA_SVERD -> Data.AREA_SVERD_O
-			Data.AREA_ZHELZ -> Data.AREA_ZHELZ_O
-			else            -> 0
+			AREA_CENTR -> AREA_CENTR_O
+			AREA_KIROV -> AREA_KIROV_O
+			AREA_LENIN -> AREA_LENIN_O
+			AREA_OKTYB -> AREA_OKTYB_O
+			AREA_SOVET -> AREA_SOVET_O
+			AREA_SVERD -> AREA_SVERD_O
+			AREA_ZHELZ -> AREA_ZHELZ_O
+			else       -> 0
 		}
 	}
 
