@@ -36,7 +36,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".places.ListPlaces" />
+        <activity android:name=".places.ListPlacesActivity" />
         <activity android:name=".Quest.ListQuest" />
         <activity android:name=".places.panoram.PointActivityGLES" />
         <activity android:name=".Quest.QuestActivity" />

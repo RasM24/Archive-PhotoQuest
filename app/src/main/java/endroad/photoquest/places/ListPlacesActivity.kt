@@ -12,7 +12,7 @@ import endroad.photoquest.data.PlaceDataSource
 import endroad.photoquest.places.panoram.PointActivityGLES
 import kotlinx.android.synthetic.main.listplaces.*
 
-class ListPlaces : AppCompatActivity() {
+class ListPlacesActivity : AppCompatActivity() {
 
 	private val placeDataSource by lazy { PlaceDataSource(this) }
 
