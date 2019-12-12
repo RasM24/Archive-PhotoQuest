@@ -10,8 +10,9 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import endroad.photoquest.Data;
 import endroad.photoquest.R;
+import endroad.photoquest.data.QuestDataSource;
+import endroad.photoquest.model.Quest;
 
 /**
  * Created by OleG on 11.01.2015.
@@ -24,13 +25,15 @@ public class QuestActivity extends AppCompatActivity implements View.OnClickList
 	ScrollView myScroll;
 	Button bt_next;
 	Quest quest;
+	QuestDataSource questDataSource;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_quest);
 
-		quest = Data.quest.get(getIntent().getIntExtra("id", -1));
+		questDataSource = new QuestDataSource(this);
+		quest = questDataSource.getList().get(getIntent().getIntExtra("id", -1));
 
 		myScroll = findViewById(R.id.scrollView);
 

@@ -1,4 +1,4 @@
-package endroad.photoquest.Places.panoram;
+package endroad.photoquest.places.panoram;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;

@@ -6,19 +6,18 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import java.util.ArrayList;
-
 import androidx.appcompat.app.AppCompatActivity;
-import endroad.photoquest.Data;
 import endroad.photoquest.R;
+import endroad.photoquest.data.QuestDataSource;
 
 /**
  * Created by OleG on 18.01.2015.
  */
 public class ListQuest extends AppCompatActivity {
-	public static ArrayList<Quest> quest = new ArrayList<>();
 	AdapterQuestPlaces adapter;
 	ListView lvMain;
+
+	QuestDataSource questDataSource;
 
 	/**
 	 * Called when the activity is first created.
@@ -27,9 +26,9 @@ public class ListQuest extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.listplaces);
 
-		quest = Data.quest;
+		questDataSource = new QuestDataSource(this);
 
-		adapter = new AdapterQuestPlaces(this, quest);
+		adapter = new AdapterQuestPlaces(this, questDataSource.getList());
 		lvMain = findViewById(R.id.lvMain);
 		lvMain.setAdapter(adapter);
 		lvMain.setOnItemClickListener(new AdapterView.OnItemClickListener() {

@@ -9,9 +9,10 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import endroad.photoquest.R;
+import endroad.photoquest.model.Quest;
 
 /**
  * Created by OleG on 18.01.2015.
@@ -19,9 +20,9 @@ import endroad.photoquest.R;
 public class AdapterQuestPlaces extends BaseAdapter {
 
 	private LayoutInflater lInflater;
-	private ArrayList<Quest> data;
+	private List<Quest> data;
 
-	AdapterQuestPlaces(ListQuest lp_, ArrayList<Quest> data_) {
+	AdapterQuestPlaces(ListQuest lp_, List<Quest> data_) {
 		Context ctx = lp_.getBaseContext();
 		data = data_;
 		lInflater = (LayoutInflater) ctx
