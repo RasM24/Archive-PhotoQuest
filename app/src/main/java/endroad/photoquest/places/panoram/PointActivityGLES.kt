@@ -51,8 +51,7 @@ class PointActivityGLES : AppCompatActivity() {
 
 		setContentView(R.layout.activity_point1)
 
-		gl_surface_view.start(this)
-		gl_surface_view.setTexturePath(point.pathTexture)
+		gl_surface_view.start(this, point.pathTexture)
 
 		bt_point_fullscreen.setOnClickListener { changeOrientation() }
 		map_img.setOnClickListener { map_img.visibility = View.INVISIBLE }

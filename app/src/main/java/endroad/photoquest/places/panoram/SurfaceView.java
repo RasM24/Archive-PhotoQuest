@@ -91,15 +91,14 @@ public class SurfaceView extends GLSurfaceView implements LifecycleObserver {
 		super.setRenderer(renderer);
 	}
 
-	public void setTexturePath(@NotNull String pathTexture) {
-		mRenderer.path = pathTexture;
-	}
-
-	public void start(LifecycleOwner lifecycleOwner) {
+	public void start(LifecycleOwner lifecycleOwner, @NotNull String pathTexture) {
 		lifecycleOwner.getLifecycle().addObserver(this);
 
 		setEGLContextClientVersion(2);
-		setRenderer(new Render(getContext()));
+		//TODO Сделать вариативность выбора рендера. Как минимум для сферической панорамы
+		mRenderer = new Render(getContext());
+		mRenderer.path = pathTexture;
+		setRenderer(mRenderer);
 	}
 
 
