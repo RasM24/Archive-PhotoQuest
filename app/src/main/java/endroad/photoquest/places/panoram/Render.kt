@@ -10,6 +10,37 @@ import java.nio.ByteOrder
 import java.nio.FloatBuffer
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
+import kotlin.math.cos
+import kotlin.math.sin
+
+const val ONE = 1.0f
+const val ZERO = 0.0f
+const val mPositionDataSize = 3
+const val mTextureCoordinateDataSize = 2
+// X, Y, Z
+val cubePositionData = floatArrayOf(
+	// Front face
+	-ONE, ONE, ONE, ONE, ONE, ONE, -ONE, -ONE, ONE, -ONE, -ONE, ONE, ONE, ONE, ONE, ONE, -ONE, ONE,
+	// Left face
+	-ONE, ONE, -ONE, -ONE, ONE, ONE, -ONE, -ONE, -ONE, -ONE, -ONE, -ONE, -ONE, ONE, ONE, -ONE, -ONE, ONE,
+	// Back face
+	ONE, ONE, -ONE, -ONE, ONE, -ONE, ONE, -ONE, -ONE, ONE, -ONE, -ONE, -ONE, ONE, -ONE, -ONE, -ONE, -ONE,
+	// Right face
+	ONE, ONE, ONE, ONE, ONE, -ONE, ONE, -ONE, ONE, ONE, -ONE, ONE, ONE, ONE, -ONE, ONE, -ONE, -ONE,
+	// Top face
+	-ONE, ONE, -ONE, ONE, ONE, -ONE, -ONE, ONE, ONE, -ONE, ONE, ONE, ONE, ONE, -ONE, ONE, ONE, ONE,
+	// Bottom face
+	-ONE, -ONE, ONE, ONE, -ONE, ONE, -ONE, -ONE, -ONE, -ONE, -ONE, -ONE, ONE, -ONE, ONE, ONE, -ONE, -ONE)
+
+// S, T (or X, Y)
+private val cubeTextureCoordinateData = floatArrayOf(
+	ONE, ZERO, ZERO, ZERO, ONE, ONE, ONE, ONE, ZERO, ZERO, ZERO, ONE, // Front face
+	ONE, ZERO, ZERO, ZERO, ONE, ONE, ONE, ONE, ZERO, ZERO, ZERO, ONE, // Right face
+	ONE, ZERO, ZERO, ZERO, ONE, ONE, ONE, ONE, ZERO, ZERO, ZERO, ONE, // Back face
+	ONE, ZERO, ZERO, ZERO, ONE, ONE, ONE, ONE, ZERO, ZERO, ZERO, ONE, // Left face
+	ONE, ZERO, ZERO, ZERO, ONE, ONE, ONE, ONE, ZERO, ZERO, ZERO, ONE, // Top face
+	ONE, ZERO, ZERO, ZERO, ONE, ONE, ONE, ONE, ZERO, ZERO, ZERO, ONE // Bottom face
+)
 
 class Render internal constructor(private val mActivityContext: Context) : GLSurfaceView.Renderer {
 	/**
@@ -28,7 +59,7 @@ class Render internal constructor(private val mActivityContext: Context) : GLSur
 	var path: String? = null
 	var zoom = 10f
 		set(value) {
-			Matrix.frustumM(mProjectionMatrix, 0, -ratio_ / 10, ratio_ / 10, -0.1f, 0.1f, 1f / value, 5.0f)
+			Matrix.frustumM(mProjectionMatrix, 0, -ratio / 10, ratio / 10, -0.1f, 0.1f, 1f / value, 5.0f)
 			field = value
 		}
 	/**
@@ -76,13 +107,12 @@ class Render internal constructor(private val mActivityContext: Context) : GLSur
 	private var mBot = 0
 	private var mLeft = 0
 	private var mRight = 0
-	//float mDeltaX;
-//float mDeltaY;
 	private var mFront = 0
 	private var mBack = 0
-	private var vision_fi = 0f // азимутальный угол камеры
-	private var vision_psy = 0f // зенитный угол камеры
-	private var ratio_ = 0f
+
+	private var visionFi = 0f // азимутальный угол камеры
+	private var visionPsy = 0f // зенитный угол камеры
+	private var ratio = 0f
 	override fun onSurfaceCreated(glUnused: GL10,
 								  config: EGLConfig) { // Set the background clear color to black.
 		GLES20.glClearColor(0.0f, 0.0f, 0.0f, 0.0f)
@@ -102,34 +132,22 @@ class Render internal constructor(private val mActivityContext: Context) : GLSur
 		val vertexShaderHandle = compileShader(GLES20.GL_VERTEX_SHADER, vertexShader)
 		val fragmentShaderHandle = compileShader(GLES20.GL_FRAGMENT_SHADER, fragmentShader)
 		mProgramHandle = createAndLinkProgram(vertexShaderHandle, fragmentShaderHandle, arrayOf("a_Position", "a_TexCoordinate"))
-		// Load the texture
-//        mTop = TextureHelper.loadTexture(mActivityContext, R.drawable.tup);
-//        GLES20.glGenerateMipmap(GLES20.GL_TEXTURE_2D);
-//        mBot = TextureHelper.loadTexture(mActivityContext, R.drawable.tdown);
-//        GLES20.glGenerateMipmap(GLES20.GL_TEXTURE_2D);
-//        mRight = TextureHelper.loadTexture(mActivityContext, R.drawable.tright);
-//        GLES20.glGenerateMipmap(GLES20.GL_TEXTURE_2D);
-//        mLeft = TextureHelper.loadTexture(mActivityContext, R.drawable.tleft);
-//        GLES20.glGenerateMipmap(GLES20.GL_TEXTURE_2D);
-//        mFront = TextureHelper.loadTexture(mActivityContext, R.drawable.tfront);
-//        GLES20.glGenerateMipmap(GLES20.GL_TEXTURE_2D);
-//        mBack = TextureHelper.loadTexture(mActivityContext, R.drawable.tback);
-//        GLES20.glGenerateMipmap(GLES20.GL_TEXTURE_2D);
-		mTop = loadTexture(mActivityContext, path + "top.jpg")
-		GLES20.glGenerateMipmap(GLES20.GL_TEXTURE_2D)
-		mBot = loadTexture(mActivityContext, path + "bottom.jpg")
-		GLES20.glGenerateMipmap(GLES20.GL_TEXTURE_2D)
-		mRight = loadTexture(mActivityContext, path + "right.jpg")
-		GLES20.glGenerateMipmap(GLES20.GL_TEXTURE_2D)
-		mLeft = loadTexture(mActivityContext, path + "left.jpg")
-		GLES20.glGenerateMipmap(GLES20.GL_TEXTURE_2D)
-		mFront = loadTexture(mActivityContext, path + "front.jpg")
-		GLES20.glGenerateMipmap(GLES20.GL_TEXTURE_2D)
-		mBack = loadTexture(mActivityContext, path + "back.jpg")
-		GLES20.glGenerateMipmap(GLES20.GL_TEXTURE_2D)
+
+		loadTexture(path)
 		// Initialize the accumulated rotation matrix
 		Matrix.setIdentityM(mAccumulatedRotation, 0)
 		onDrawFrame(glUnused)
+	}
+
+	//TODO убрать загрузку текстур из рендера
+	private fun loadTexture(pathTexture: String?) {
+		mTop = loadTexture(mActivityContext, "${pathTexture}top.jpg")
+		mBot = loadTexture(mActivityContext, "${pathTexture}bottom.jpg")
+		mRight = loadTexture(mActivityContext, "${pathTexture}right.jpg")
+		mLeft = loadTexture(mActivityContext, "${pathTexture}left.jpg")
+		mFront = loadTexture(mActivityContext, "${pathTexture}front.jpg")
+		mBack = loadTexture(mActivityContext, "${pathTexture}back.jpg")
+		GLES20.glGenerateMipmap(GLES20.GL_TEXTURE_2D)
 	}
 
 	override fun onSurfaceChanged(glUnused: GL10, width: Int, height: Int) { // Set the OpenGL viewport to the same size as the surface.
@@ -137,23 +155,17 @@ class Render internal constructor(private val mActivityContext: Context) : GLSur
 		// Create a new perspective projection matrix. The height will stay the same
 // while the width will vary as per aspect ratio.
 		val ratio = width.toFloat() / height
-		ratio_ = ratio
+		this.ratio = ratio
 		Matrix.frustumM(mProjectionMatrix, 0, -ratio / 10, ratio / 10, -0.1f, 0.1f, 1f / zoom, 5.0f)
 	}
 
 	override fun onDrawFrame(glUnused: GL10) {
 		GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT or GLES20.GL_DEPTH_BUFFER_BIT)
-		Matrix.setLookAtM(mViewMatrix,
-						  0,
-						  0f,
-						  0f,
-						  0f,
-						  (Math.sin(vision_fi.toDouble()) * Math.cos(vision_psy.toDouble())).toFloat(),
-						  Math.sin(vision_psy.toDouble()).toFloat(),
-						  (-(Math.cos(vision_psy.toDouble()) * Math.cos(vision_fi.toDouble()))).toFloat(),
-						  0f,
-						  1f / zoom,
-						  0f)
+
+		Matrix.setLookAtM(mViewMatrix, 0,
+						  0f, 0f, 0f,
+						  sin(visionFi) * cos(visionPsy), sin(visionPsy), -(cos(visionPsy) * cos(visionFi)),
+						  0f, 1f / zoom, 0f)
 		// Set our per-vertex lighting program.
 		GLES20.glUseProgram(mProgramHandle)
 		// Set program handles for cube drawing.
@@ -163,6 +175,7 @@ class Render internal constructor(private val mActivityContext: Context) : GLSur
 		mPositionHandle = GLES20.glGetAttribLocation(mProgramHandle, "a_Position")
 		val mTextureCoordinateHandle = GLES20.glGetAttribLocation(mProgramHandle,
 																  "a_TexCoordinate") //  This will be used to pass in model texture coordinate information.
+
 		// Draw a cube.
 // Translate the cube into the screen.
 		Matrix.setIdentityM(mModelMatrix, 0)
@@ -179,39 +192,40 @@ class Render internal constructor(private val mActivityContext: Context) : GLSur
 		System.arraycopy(mTemporaryMatrix, 0, mModelMatrix, 0, 16)
 		// Set the active texture unit to texture unit 0.
 		GLES20.glActiveTexture(GLES20.GL_TEXTURE0)
-		// Bind the texture to this unit.
-		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mFront)
 		// Tell the texture uniform sampler to use this texture in the shader by binding to texture unit 0.
 		GLES20.glUniform1i(mTextureUniformHandle, 0)
 		// Pass in the texture coordinate information
 		mCubeTextureCoordinates.position(0)
-		val mTextureCoordinateDataSize = 2
-		GLES20.glVertexAttribPointer(mTextureCoordinateHandle, mTextureCoordinateDataSize, GLES20.GL_FLOAT, false,
-									 0, mCubeTextureCoordinates) // Size of the texture coordinate data in elements.
+		GLES20.glVertexAttribPointer(mTextureCoordinateHandle,
+									 mTextureCoordinateDataSize,
+									 GLES20.GL_FLOAT,
+									 false,
+									 0,
+									 mCubeTextureCoordinates) // Size of the texture coordinate data in elements.
 		GLES20.glEnableVertexAttribArray(mTextureCoordinateHandle)
+
+		passInThePositionInformation()
 		drawCube()
 	}
 
-	fun turnVision(_dfi: Float, _dpsy: Float) {
-		vision_fi += _dfi
-		vision_psy += _dpsy
-		if (vision_psy > 1.5f) {
-			vision_psy = 1.5f
+	//TODO Переделать в listener
+	fun turnVision(deltaFi: Float, deltaPsy: Float) {
+		visionFi += deltaFi
+		visionPsy += deltaPsy
+
+		if (visionPsy > 1.5f) {
+			visionPsy = 1.5f
 		}
-		if (vision_psy < -1.5f) {
-			vision_psy = -1.5f
+		if (visionPsy < -1.5f) {
+			visionPsy = -1.5f
 		}
 	}
 
 	/**
 	 * Draws a cube.
 	 */
-	private fun drawCube() { // Pass in the position information
-		mCubePositions.position(0)
-		val mPositionDataSize = 3
-		GLES20.glVertexAttribPointer(mPositionHandle, mPositionDataSize, GLES20.GL_FLOAT, false,
-									 0, mCubePositions) // Size of the position data in elements.
-		GLES20.glEnableVertexAttribArray(mPositionHandle)
+	private fun drawCube() {
+
 		// This multiplies the view matrix by the model matrix, and stores the result in the MVP matrix
 // (which currently contains model * view).
 		Matrix.multiplyMM(mMVPMatrix, 0, mViewMatrix, 0, mModelMatrix, 0)
@@ -224,6 +238,8 @@ class Render internal constructor(private val mActivityContext: Context) : GLSur
 		// Pass in the combined matrix.
 		GLES20.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, mMVPMatrix, 0)
 		// Draw the cube.
+		// Bind the texture to this unit.
+		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mFront)
 		GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, 6) // Bind the texture to this unit.
 		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mRight)
 		GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 6, 6)
@@ -237,90 +253,21 @@ class Render internal constructor(private val mActivityContext: Context) : GLSur
 		GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 30, 6)
 	}
 
+	private fun passInThePositionInformation() {
+		mCubePositions.position(0)
+		GLES20.glVertexAttribPointer(mPositionHandle, mPositionDataSize, GLES20.GL_FLOAT, false, 0, mCubePositions)
+		GLES20.glEnableVertexAttribArray(mPositionHandle)
+	}
+
 	/**
 	 * Initialize the model data.
 	 */
 	init {
-		// X, Y, Z
-		val cubePositionData = floatArrayOf( // Front face
-			-1.0f, 1.0f, 1.0f,
-			1.0f, 1.0f, 1.0f,
-			-1.0f, -1.0f, 1.0f,
-			-1.0f, -1.0f, 1.0f,
-			1.0f, 1.0f, 1.0f,
-			1.0f, -1.0f, 1.0f,  // Left face
-			-1.0f, 1.0f, -1.0f,
-			-1.0f, 1.0f, 1.0f,
-			-1.0f, -1.0f, -1.0f,
-			-1.0f, -1.0f, -1.0f,
-			-1.0f, 1.0f, 1.0f,
-			-1.0f, -1.0f, 1.0f,  // Back face
-			1.0f, 1.0f, -1.0f,
-			-1.0f, 1.0f, -1.0f,
-			1.0f, -1.0f, -1.0f,
-			1.0f, -1.0f, -1.0f,
-			-1.0f, 1.0f, -1.0f,
-			-1.0f, -1.0f, -1.0f,  // Right face
-			1.0f, 1.0f, 1.0f,
-			1.0f, 1.0f, -1.0f,
-			1.0f, -1.0f, 1.0f,
-			1.0f, -1.0f, 1.0f,
-			1.0f, 1.0f, -1.0f,
-			1.0f, -1.0f, -1.0f,  // Top face
-			-1.0f, 1.0f, -1.0f,
-			1.0f, 1.0f, -1.0f,
-			-1.0f, 1.0f, 1.0f,
-			-1.0f, 1.0f, 1.0f,
-			1.0f, 1.0f, -1.0f,
-			1.0f, 1.0f, 1.0f,  // Bottom face
-			-1.0f, -1.0f, 1.0f,
-			1.0f, -1.0f, 1.0f,
-			-1.0f, -1.0f, -1.0f,
-			-1.0f, -1.0f, -1.0f,
-			1.0f, -1.0f, 1.0f,
-			1.0f, -1.0f, -1.0f)
-		// S, T (or X, Y)
 // Texture coordinate data.
 // Because images have a Y axis pointing downward (values increase as you move down the image) while
 // OpenGL has a Y axis pointing upward, we adjust for that here by flipping the Y axis.
 // What's more is that the texture coordinates are the same for every face.
-		val cubeTextureCoordinateData = floatArrayOf( // Front face
-			1.0f, 0.0f,
-			0.0f, 0.0f,
-			1.0f, 1.0f,
-			1.0f, 1.0f,
-			0.0f, 0.0f,
-			0.0f, 1.0f,  // Right face
-			1.0f, 0.0f,
-			0.0f, 0.0f,
-			1.0f, 1.0f,
-			1.0f, 1.0f,
-			0.0f, 0.0f,
-			0.0f, 1.0f,  // Back face
-			1.0f, 0.0f,
-			0.0f, 0.0f,
-			1.0f, 1.0f,
-			1.0f, 1.0f,
-			0.0f, 0.0f,
-			0.0f, 1.0f,  // Left face
-			1.0f, 0.0f,
-			0.0f, 0.0f,
-			1.0f, 1.0f,
-			1.0f, 1.0f,
-			0.0f, 0.0f,
-			0.0f, 1.0f,  // Top face
-			1.0f, 0.0f,
-			0.0f, 0.0f,
-			1.0f, 1.0f,
-			1.0f, 1.0f,
-			0.0f, 0.0f,
-			0.0f, 1.0f,  // Bottom face
-			1.0f, 0.0f,
-			0.0f, 0.0f,
-			1.0f, 1.0f,
-			1.0f, 1.0f,
-			0.0f, 0.0f,
-			0.0f, 1.0f)
+
 		// Initialize the buffers.
 		val mBytesPerFloat = 4 //How many bytes per float.
 		mCubePositions = ByteBuffer.allocateDirect(cubePositionData.size * mBytesPerFloat)
