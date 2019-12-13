@@ -14,6 +14,8 @@ import javax.microedition.khronos.opengles.GL10;
 
 import endroad.photoquest.R;
 
+import static endroad.photoquest.places.panoram.TextureHelperKt.loadTexture;
+
 
 public class Render implements GLSurfaceView.Renderer {
 	private final Context mActivityContext;
@@ -258,17 +260,17 @@ public class Render implements GLSurfaceView.Renderer {
 //        mBack = TextureHelper.loadTexture(mActivityContext, R.drawable.tback);
 //        GLES20.glGenerateMipmap(GLES20.GL_TEXTURE_2D);
 
-		mTop = TextureHelper.loadTexture(mActivityContext, path + "top.jpg");
+		mTop = loadTexture(mActivityContext, path + "top.jpg");
 		GLES20.glGenerateMipmap(GLES20.GL_TEXTURE_2D);
-		mBot = TextureHelper.loadTexture(mActivityContext, path + "bottom.jpg");
+		mBot = loadTexture(mActivityContext, path + "bottom.jpg");
 		GLES20.glGenerateMipmap(GLES20.GL_TEXTURE_2D);
-		mRight = TextureHelper.loadTexture(mActivityContext, path + "right.jpg");
+		mRight = loadTexture(mActivityContext, path + "right.jpg");
 		GLES20.glGenerateMipmap(GLES20.GL_TEXTURE_2D);
-		mLeft = TextureHelper.loadTexture(mActivityContext, path + "left.jpg");
+		mLeft = loadTexture(mActivityContext, path + "left.jpg");
 		GLES20.glGenerateMipmap(GLES20.GL_TEXTURE_2D);
-		mFront = TextureHelper.loadTexture(mActivityContext, path + "front.jpg");
+		mFront = loadTexture(mActivityContext, path + "front.jpg");
 		GLES20.glGenerateMipmap(GLES20.GL_TEXTURE_2D);
-		mBack = TextureHelper.loadTexture(mActivityContext, path + "back.jpg");
+		mBack = loadTexture(mActivityContext, path + "back.jpg");
 		GLES20.glGenerateMipmap(GLES20.GL_TEXTURE_2D);
 
 
