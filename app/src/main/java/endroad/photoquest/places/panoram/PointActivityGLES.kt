@@ -3,7 +3,6 @@ package endroad.photoquest.places.panoram
 import android.content.Context
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
-import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.location.Location
 import android.location.LocationListener
@@ -17,17 +16,16 @@ import androidx.appcompat.app.AppCompatActivity
 import endroad.photoquest.R
 import endroad.photoquest.data.PlaceDataSource
 import kotlinx.android.synthetic.main.activity_point1.*
-import java.io.IOException
 import kotlin.math.hypot
 
-class PointActivityGLES : AppCompatActivity(), View.OnClickListener {
+class PointActivityGLES : AppCompatActivity() {
 
 	private val placeId: Int by lazy { intent.getIntExtra("id", -1) }
 
 	//TODO криво и костыльно, будет в таком виде до перехода на фрагменты
-	val point by lazy { PlaceDataSource(this).getList()[placeId] }
+	private val point by lazy { PlaceDataSource(this).getList()[placeId] }
 
-	var gps: LocationManager? = null
+	private val gps by lazy { getSystemService(Context.LOCATION_SERVICE) as LocationManager }
 
 	private val locationListener: LocationListener = object : LocationListener {
 		override fun onLocationChanged(location: Location) {
@@ -56,25 +54,22 @@ class PointActivityGLES : AppCompatActivity(), View.OnClickListener {
 		gl_surface_view.start(this)
 		gl_surface_view.setTexturePath(point.pathTexture)
 
-		bt_point_fullscreen.setOnClickListener(this)
-		bt_map_img.setOnClickListener(this)
-		map_img.setOnClickListener(this)
-		map_img.visibility = View.INVISIBLE
-		try {
-			val ims = assets.open(point.pathTexture + "map.jpg")
-			val d = Drawable.createFromStream(ims, null)
-			map_img.setImageDrawable(d)
-		} catch (ex: IOException) {
-			return
+		bt_point_fullscreen.setOnClickListener { changeOrientation() }
+		map_img.setOnClickListener { map_img.visibility = View.INVISIBLE }
+		bt_map_img.setOnClickListener {
+			bt_map_img.visibility = View.VISIBLE
+			openPoint()
 		}
-		bt_open_img.visibility = View.INVISIBLE
-		bt_open_img.setBackgroundColor(Color.TRANSPARENT)
-		bt_open_img.setImageResource(R.drawable.test)
-		bt_open_img.setOnClickListener(this)
-		gps = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+		bt_open_img.setOnClickListener {
+			bt_open_img.visibility = View.INVISIBLE
+			finish()
+		}
+
+		map_img.setImageDrawable(loadImage("${point.pathTexture}map.jpg"))
+
 		//TODO добавить запрос разрешения на геолокацию
-		gps!!.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER,
-									 1000, 0f, locationListener)
+		gps.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER,
+								   1000, 0f, locationListener)
 	}
 
 	private fun setupOrientation() {
@@ -86,6 +81,18 @@ class PointActivityGLES : AppCompatActivity(), View.OnClickListener {
 			requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 		}
 	}
+
+	private fun changeOrientation() {
+		if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+			requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+		} else if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+			requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+		}
+	}
+
+	private fun loadImage(path: String): Drawable? =
+		runCatching { Drawable.createFromStream(assets.open(path), null) }
+			.getOrNull()
 
 	override fun onStart() {
 		super.onStart()
@@ -103,25 +110,7 @@ class PointActivityGLES : AppCompatActivity(), View.OnClickListener {
 
 	override fun onDestroy() {
 		super.onDestroy()
-		gps!!.removeUpdates(locationListener)
-	}
-
-	override fun onClick(v: View) {
-		when (v.id) {
-			R.id.bt_point_fullscreen -> if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE else if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-
-			R.id.bt_map_img          -> {
-				bt_map_img.visibility = View.VISIBLE
-				openPoint()
-			}
-
-			R.id.map_img             -> map_img.visibility = View.INVISIBLE
-
-			R.id.bt_open_img         -> {
-				bt_open_img.visibility = View.INVISIBLE
-				finish()
-			}
-		}
+		gps.removeUpdates(locationListener)
 	}
 
 	fun openPoint() {
