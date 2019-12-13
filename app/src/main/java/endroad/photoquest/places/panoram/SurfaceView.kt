@@ -42,9 +42,9 @@ class SurfaceView constructor(context: Context?, attrs: AttributeSet?) : GLSurfa
 	private fun onDoubleClickListener() {
 		render?.let {
 			if (it.zoom > 6)
-				it.setZoom(it.zoom - 3.9f)
+				it.zoom = it.zoom - 3.9f
 			else
-				it.setZoom(10f)
+				it.zoom = 10f
 		}
 	}
 
@@ -89,7 +89,7 @@ class SurfaceView constructor(context: Context?, attrs: AttributeSet?) : GLSurfa
 												  event.getY(FIRST_FINGER) - event.getY(SECOND_FINGER).toDouble()).toFloat()
 			if (bb > 10) bb = 10f
 			if (bb < 2) bb = 2f
-			render?.setZoom(bb)
+			render?.zoom = bb
 		}
 		render?.run { turnVision(-(xx - xstart) * zoom / 3000, (yy - ystart) * zoom / 3000) }
 		xstart = xx
