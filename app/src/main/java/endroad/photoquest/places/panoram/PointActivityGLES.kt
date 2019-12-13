@@ -50,21 +50,16 @@ class PointActivityGLES : AppCompatActivity(), View.OnClickListener {
 
 	public override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
-		if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-			requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-			window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
-			requestWindowFeature(Window.FEATURE_NO_TITLE)
-		} else {
-			requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-		}
+		setupOrientation()
+
 		setContentView(R.layout.activity_point1)
-		gl_surface_view.setEGLContextClientVersion(2)
-		val mRender = Render(this)
-		gl_surface_view.setRenderer(mRender)
+
+		gl_surface_view.start(this)
+
 		try {
 			placeDataSource = PlaceDataSource(this)
 			point = placeDataSource.getList()[intent.getIntExtra("id", -1)]
-			mRender.path = point!!.pathTexture
+			gl_surface_view.setTexturePath(point!!.pathTexture)
 		} catch (e: Exception) {
 			Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show()
 			finish()
@@ -87,7 +82,17 @@ class PointActivityGLES : AppCompatActivity(), View.OnClickListener {
 		gps = getSystemService(Context.LOCATION_SERVICE) as LocationManager
 		//TODO добавить запрос разрешения на геолокацию
 		gps!!.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER,
-								   1000, 0f, locationListener)
+									 1000, 0f, locationListener)
+	}
+
+	private fun setupOrientation() {
+		if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+			requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+			window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+			requestWindowFeature(Window.FEATURE_NO_TITLE)
+		} else {
+			requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+		}
 	}
 
 	override fun onStart() {
@@ -101,13 +106,7 @@ class PointActivityGLES : AppCompatActivity(), View.OnClickListener {
 
 	override fun onResume() {
 		super.onResume()
-		gl_surface_view.onResume()
 		bt_map_img.setImageResource(R.drawable.dist_0)
-	}
-
-	override fun onPause() {
-		super.onPause()
-		gl_surface_view.onPause()
 	}
 
 	override fun onDestroy() {

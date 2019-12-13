@@ -5,7 +5,14 @@ import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
-public class SurfaceView extends GLSurfaceView {
+import org.jetbrains.annotations.NotNull;
+
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleObserver;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.OnLifecycleEvent;
+
+public class SurfaceView extends GLSurfaceView implements LifecycleObserver {
 	float xstart = 0f;
 	float ystart = 0f;
 	float forZoom;
@@ -19,7 +26,6 @@ public class SurfaceView extends GLSurfaceView {
 		//mRenderer = new Render(context);
 		//setRenderer(mRenderer);
 	}
-
 
 	public SurfaceView(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -57,7 +63,6 @@ public class SurfaceView extends GLSurfaceView {
 				ystart = event.getY(1);
 			}
 		}
-
 		if (event.getActionMasked() == MotionEvent.ACTION_MOVE) {
 			float xx;
 			float yy;
@@ -84,5 +89,27 @@ public class SurfaceView extends GLSurfaceView {
 	public void setRenderer(Render renderer) {
 		mRenderer = renderer;
 		super.setRenderer(renderer);
+	}
+
+	public void setTexturePath(@NotNull String pathTexture) {
+		mRenderer.path = pathTexture;
+	}
+
+	public void start(LifecycleOwner lifecycleOwner) {
+		lifecycleOwner.getLifecycle().addObserver(this);
+
+		setEGLContextClientVersion(2);
+		setRenderer(new Render(getContext()));
+	}
+
+
+	@OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+	private void runRender() {
+		onResume();
+	}
+
+	@OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+	private void stopRender() {
+		onPause();
 	}
 }
