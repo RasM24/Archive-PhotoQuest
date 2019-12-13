@@ -14,6 +14,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import endroad.photoquest.R;
 
+import static endroad.photoquest.places.panoram.RawResourceReaderKt.readTextFileFromRawResource;
 import static endroad.photoquest.places.panoram.ShaderHelperKt.compileShader;
 import static endroad.photoquest.places.panoram.ShaderHelperKt.createAndLinkProgram;
 import static endroad.photoquest.places.panoram.TextureHelperKt.loadTexture;
@@ -238,8 +239,8 @@ public class Render implements GLSurfaceView.Renderer {
 		// view matrix. In OpenGL 2, we can keep track of these matrices separately if we choose.
 		Matrix.setLookAtM(mViewMatrix, 0, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f);
 
-		final String vertexShader = RawResourceReader.readTextFileFromRawResource(mActivityContext, R.raw.per_pixel_vertex_shader_tex_and_light);
-		final String fragmentShader = RawResourceReader.readTextFileFromRawResource(mActivityContext, R.raw.per_pixel_fragment_shader_tex_and_light);
+		final String vertexShader = readTextFileFromRawResource(mActivityContext, R.raw.per_pixel_vertex_shader_tex_and_light);
+		final String fragmentShader = readTextFileFromRawResource(mActivityContext, R.raw.per_pixel_fragment_shader_tex_and_light);
 
 		final int vertexShaderHandle = compileShader(GLES20.GL_VERTEX_SHADER, vertexShader);
 		final int fragmentShaderHandle = compileShader(GLES20.GL_FRAGMENT_SHADER, fragmentShader);
