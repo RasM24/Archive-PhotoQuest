@@ -13,20 +13,19 @@ import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.view.animation.AnimationUtils
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import endroad.photoquest.R
 import endroad.photoquest.data.PlaceDataSource
-import endroad.photoquest.model.Place
 import kotlinx.android.synthetic.main.activity_point1.*
 import java.io.IOException
 import kotlin.math.hypot
 
 class PointActivityGLES : AppCompatActivity(), View.OnClickListener {
 
-	lateinit var placeDataSource: PlaceDataSource
+	private val placeId: Int by lazy { intent.getIntExtra("id", -1) }
 
-	var point: Place? = null
+	//TODO криво и костыльно, будет в таком виде до перехода на фрагменты
+	val point by lazy { PlaceDataSource(this).getList()[placeId] }
 
 	var gps: LocationManager? = null
 
@@ -34,12 +33,12 @@ class PointActivityGLES : AppCompatActivity(), View.OnClickListener {
 		override fun onLocationChanged(location: Location) {
 			val x = location.latitude
 			val y = location.longitude
-			val distance = hypot(x - point!!.posX, y - point!!.posY)
-			if (distance < 0.00021 && !point!!.opened) //если выполняется это условие, то вы открыли точку
+			val distance = hypot(x - point.posX, y - point.posY)
+			if (distance < 0.00021 && !point.opened) //если выполняется это условие, то вы открыли точку
 			{
 				openPoint()
 			} else {
-				bt_map_img.setImageResource(point!!.getIdRes(distance))
+				bt_map_img.setImageResource(point.getIdRes(distance))
 			}
 		}
 
@@ -55,21 +54,14 @@ class PointActivityGLES : AppCompatActivity(), View.OnClickListener {
 		setContentView(R.layout.activity_point1)
 
 		gl_surface_view.start(this)
+		gl_surface_view.setTexturePath(point.pathTexture)
 
-		try {
-			placeDataSource = PlaceDataSource(this)
-			point = placeDataSource.getList()[intent.getIntExtra("id", -1)]
-			gl_surface_view.setTexturePath(point!!.pathTexture)
-		} catch (e: Exception) {
-			Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show()
-			finish()
-		}
 		bt_point_fullscreen.setOnClickListener(this)
 		bt_map_img.setOnClickListener(this)
 		map_img.setOnClickListener(this)
 		map_img.visibility = View.INVISIBLE
 		try {
-			val ims = assets.open(point!!.pathTexture + "map.jpg")
+			val ims = assets.open(point.pathTexture + "map.jpg")
 			val d = Drawable.createFromStream(ims, null)
 			map_img.setImageDrawable(d)
 		} catch (ex: IOException) {
@@ -133,10 +125,10 @@ class PointActivityGLES : AppCompatActivity(), View.OnClickListener {
 	}
 
 	fun openPoint() {
-		point!!.opened = true
+		point.opened = true
 		val sPref = getSharedPreferences("Places", Context.MODE_PRIVATE)
 		val ed = sPref.edit()
-		ed.putBoolean(point!!.openName, true)
+		ed.putBoolean(point.openName, true)
 		ed.apply()
 		val anim = AnimationUtils.loadAnimation(this, R.anim.anim_alpha)
 		bt_open_img.startAnimation(anim)
