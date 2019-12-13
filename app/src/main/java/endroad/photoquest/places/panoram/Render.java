@@ -295,7 +295,7 @@ public class Render implements GLSurfaceView.Renderer {
 		Matrix.frustumM(mProjectionMatrix, 0, -ratio / 10, ratio / 10, -0.1f, 0.1f, 1f / zoom, 5.0f);
 	}
 
-	void zoom(float aa) {
+	void setZoom(float aa) {
 		zoom = aa;
 		Matrix.frustumM(mProjectionMatrix, 0, -ratio_ / 10, ratio_ / 10, -0.1f, 0.1f, 1f / zoom, 5.0f);
 
