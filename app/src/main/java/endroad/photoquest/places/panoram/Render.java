@@ -14,6 +14,8 @@ import javax.microedition.khronos.opengles.GL10;
 
 import endroad.photoquest.R;
 
+import static endroad.photoquest.places.panoram.ShaderHelperKt.compileShader;
+import static endroad.photoquest.places.panoram.ShaderHelperKt.createAndLinkProgram;
 import static endroad.photoquest.places.panoram.TextureHelperKt.loadTexture;
 
 
@@ -239,10 +241,10 @@ public class Render implements GLSurfaceView.Renderer {
 		final String vertexShader = RawResourceReader.readTextFileFromRawResource(mActivityContext, R.raw.per_pixel_vertex_shader_tex_and_light);
 		final String fragmentShader = RawResourceReader.readTextFileFromRawResource(mActivityContext, R.raw.per_pixel_fragment_shader_tex_and_light);
 
-		final int vertexShaderHandle = ShaderHelper.compileShader(GLES20.GL_VERTEX_SHADER, vertexShader);
-		final int fragmentShaderHandle = ShaderHelper.compileShader(GLES20.GL_FRAGMENT_SHADER, fragmentShader);
+		final int vertexShaderHandle = compileShader(GLES20.GL_VERTEX_SHADER, vertexShader);
+		final int fragmentShaderHandle = compileShader(GLES20.GL_FRAGMENT_SHADER, fragmentShader);
 
-		mProgramHandle = ShaderHelper.createAndLinkProgram(vertexShaderHandle, fragmentShaderHandle,
+		mProgramHandle = createAndLinkProgram(vertexShaderHandle, fragmentShaderHandle,
 				new String[]{"a_Position", "a_TexCoordinate"});
 
 		// Load the texture
