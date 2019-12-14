@@ -147,12 +147,12 @@ internal class Render internal constructor(private val mActivityContext: Context
 
 	//TODO убрать загрузку текстур из рендера
 	private fun loadTexture(pathTexture: String?) {
-		mTop = loadTexture(mActivityContext, "${pathTexture}top.jpg")
-		mBot = loadTexture(mActivityContext, "${pathTexture}bottom.jpg")
-		mRight = loadTexture(mActivityContext, "${pathTexture}right.jpg")
-		mLeft = loadTexture(mActivityContext, "${pathTexture}left.jpg")
-		mFront = loadTexture(mActivityContext, "${pathTexture}front.jpg")
-		mBack = loadTexture(mActivityContext, "${pathTexture}back.jpg")
+		mTop = mActivityContext.loadBitmap("${pathTexture}top.jpg").toTexture()
+		mBot = mActivityContext.loadBitmap("${pathTexture}bottom.jpg").toTexture()
+		mRight = mActivityContext.loadBitmap("${pathTexture}right.jpg").toTexture()
+		mLeft = mActivityContext.loadBitmap("${pathTexture}left.jpg").toTexture()
+		mFront = mActivityContext.loadBitmap("${pathTexture}front.jpg").toTexture()
+		mBack = mActivityContext.loadBitmap("${pathTexture}back.jpg").toTexture()
 		GLES20.glGenerateMipmap(GLES20.GL_TEXTURE_2D)
 	}
 
