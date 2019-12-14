@@ -41,7 +41,11 @@ private val cubeTextureCoordinateData = floatArrayOf(
 	ONE, ZERO, ZERO, ZERO, ONE, ONE, ONE, ONE, ZERO, ZERO, ZERO, ONE // Bottom face
 )
 
-internal class Render internal constructor(private val mActivityContext: Context) : GLSurfaceView.Renderer, OnTurnVisionListener {
+internal class Render internal constructor(
+	private val mActivityContext: Context,
+	private val cubeTextures: CubeTextureEntity
+) : GLSurfaceView.Renderer, OnTurnVisionListener {
+
 	/**
 	 * Store the accumulated rotation.
 	 */
@@ -61,7 +65,6 @@ internal class Render internal constructor(private val mActivityContext: Context
 		.asFloatBuffer()
 		.apply { put(cubeTextureCoordinateData).position(0) }
 
-	var path: String? = null
 	var zoom = 10f
 		set(value) {
 			Matrix.frustumM(mProjectionMatrix, 0, -ratio / 10, ratio / 10, -0.1f, 0.1f, 1f / value, 5.0f)
@@ -105,15 +108,6 @@ internal class Render internal constructor(private val mActivityContext: Context
 	 * This is a handle to our cube shading program.
 	 */
 	private var mProgramHandle = 0
-	/**
-	 * These are handles to our texture data.
-	 */
-	private var mTop = 0
-	private var mBot = 0
-	private var mLeft = 0
-	private var mRight = 0
-	private var mFront = 0
-	private var mBack = 0
 
 	private var visionFi = 0f // азимутальный угол камеры
 	private var visionPsy = 0f // зенитный угол камеры
@@ -139,21 +133,10 @@ internal class Render internal constructor(private val mActivityContext: Context
 		val fragmentShaderHandle = compileShader(GLES20.GL_FRAGMENT_SHADER, fragmentShader)
 		mProgramHandle = createAndLinkProgram(vertexShaderHandle, fragmentShaderHandle, arrayOf("a_Position", "a_TexCoordinate"))
 
-		loadTexture(path)
+		cubeTextures.init()
 		// Initialize the accumulated rotation matrix
 		Matrix.setIdentityM(mAccumulatedRotation, 0)
 		onDrawFrame(glUnused)
-	}
-
-	//TODO убрать загрузку текстур из рендера
-	private fun loadTexture(pathTexture: String?) {
-		mTop = mActivityContext.loadBitmap("${pathTexture}top.jpg").toTexture()
-		mBot = mActivityContext.loadBitmap("${pathTexture}bottom.jpg").toTexture()
-		mRight = mActivityContext.loadBitmap("${pathTexture}right.jpg").toTexture()
-		mLeft = mActivityContext.loadBitmap("${pathTexture}left.jpg").toTexture()
-		mFront = mActivityContext.loadBitmap("${pathTexture}front.jpg").toTexture()
-		mBack = mActivityContext.loadBitmap("${pathTexture}back.jpg").toTexture()
-		GLES20.glGenerateMipmap(GLES20.GL_TEXTURE_2D)
 	}
 
 	override fun onSurfaceChanged(glUnused: GL10, width: Int, height: Int) { // Set the OpenGL viewport to the same size as the surface.
@@ -232,17 +215,17 @@ internal class Render internal constructor(private val mActivityContext: Context
 		GLES20.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, mMVPMatrix, 0)
 		// Draw the cube.
 		// Bind the texture to this unit.
-		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mFront)
+		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, cubeTextures.front)
 		GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, 6) // Bind the texture to this unit.
-		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mRight)
+		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, cubeTextures.right)
 		GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 6, 6)
-		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mBack)
+		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, cubeTextures.back)
 		GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 12, 6)
-		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mLeft)
+		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, cubeTextures.left)
 		GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 18, 6)
-		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTop)
+		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, cubeTextures.top)
 		GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 24, 6)
-		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mBot)
+		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, cubeTextures.bottom)
 		GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 30, 6)
 	}
 

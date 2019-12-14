@@ -22,7 +22,7 @@ class PanoramaView constructor(context: Context?, attrs: AttributeSet?) : GLSurf
 		lifecycleOwner.lifecycle.addObserver(this)
 		setEGLContextClientVersion(2)
 		//TODO Сделать вариативность выбора рендера. Как минимум для сферической панорамы
-		render = Render(context).apply { path = pathTexture }
+		render = Render(context, CubeTextureEntity.fromBitmap(context, pathTexture))
 
 		super.setRenderer(render)
 	}
