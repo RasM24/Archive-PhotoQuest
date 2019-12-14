@@ -3,7 +3,8 @@
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
 	android:id="@+id/panoramic_place_item"
-	android:orientation="horizontal">
+	android:orientation="horizontal"
+	android:background="#DDD">
 
 	<ImageView
 		android:id="@+id/ivPlace"

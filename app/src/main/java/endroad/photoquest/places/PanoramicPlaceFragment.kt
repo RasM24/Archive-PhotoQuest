@@ -42,12 +42,7 @@ class PanoramicPlaceFragment : BaseFragment() {
 			val x = location.latitude
 			val y = location.longitude
 			val distance = hypot(x - point.posX, y - point.posY)
-			if (distance < 0.00021 && !point.opened) //если выполняется это условие, то вы открыли точку
-			{
-				openPoint()
-			} else {
-				bt_map_img.setImageResource(point.getIdRes(distance))
-			}
+			bt_map_img.setImageResource(point.getIdRes(distance))
 		}
 
 		override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {}
@@ -126,7 +121,6 @@ class PanoramicPlaceFragment : BaseFragment() {
 	}
 
 	fun openPoint() {
-		point.opened = true
 		val sPref = requireContext().getSharedPreferences("Places", Context.MODE_PRIVATE)
 		val ed = sPref.edit()
 		ed.putBoolean(point.openName, true)

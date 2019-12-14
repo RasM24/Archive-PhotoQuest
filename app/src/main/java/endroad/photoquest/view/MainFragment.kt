@@ -17,7 +17,7 @@ class MainFragment : BaseFragment() {
 
 	override val layout = R.layout.main_fragment
 
-	private val placeDataSource by lazy { PlaceDataSource(requireContext()) }
+	private val placeDataSource by lazy { PlaceDataSource() }
 
 	override fun setupViewComponents() {
 		bt_place.setOnClickListener { requireFragmentManager().forwardTo(PlaceListFragment.newInstance()) }
