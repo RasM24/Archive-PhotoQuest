@@ -1,4 +1,4 @@
-package endroad.photoquest.Quest;
+package endroad.photoquest.quest;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -50,7 +50,7 @@ public class AdapterQuestPlaces extends BaseAdapter {
 
 		View view = convertView;
 		if (view == null) {
-			view = lInflater.inflate(R.layout.item, parent, false);
+			view = lInflater.inflate(R.layout.panoramic_place_item, parent, false);
 		}
 
 		if (data.get(position).nowTaskId == -1) {

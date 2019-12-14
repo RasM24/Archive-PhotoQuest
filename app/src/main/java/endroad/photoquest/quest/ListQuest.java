@@ -1,4 +1,4 @@
-package endroad.photoquest.Quest;
+package endroad.photoquest.quest;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,12 +24,12 @@ public class ListQuest extends AppCompatActivity {
 	 */
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.listplaces);
+		setContentView(R.layout.place_list_fragment);
 
 		questDataSource = new QuestDataSource(this);
 
 		adapter = new AdapterQuestPlaces(this, questDataSource.getList());
-		lvMain = findViewById(R.id.lvMain);
+		lvMain = findViewById(R.id.list);
 		lvMain.setAdapter(adapter);
 		lvMain.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view,
