@@ -3,7 +3,6 @@ package endroad.photoquest.places.panoram
 import android.content.Context
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
-import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.location.Location
 import android.location.LocationListener
@@ -13,33 +12,32 @@ import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.view.animation.AnimationUtils
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import endroad.photoquest.R
 import endroad.photoquest.data.PlaceDataSource
-import endroad.photoquest.model.Place
 import kotlinx.android.synthetic.main.activity_point1.*
-import java.io.IOException
+import ru.endroad.panorama.TexturePathes
 import kotlin.math.hypot
 
-class PointActivityGLES : AppCompatActivity(), View.OnClickListener {
+class PointActivityGLES : AppCompatActivity() {
 
-	lateinit var placeDataSource: PlaceDataSource
+	private val placeId: Int by lazy { intent.getIntExtra("id", -1) }
 
-	var point: Place? = null
+	//TODO криво и костыльно, будет в таком виде до перехода на фрагменты
+	private val point by lazy { PlaceDataSource(this).getList()[placeId] }
 
-	var gps: LocationManager? = null
+	private val gps by lazy { getSystemService(Context.LOCATION_SERVICE) as LocationManager }
 
 	private val locationListener: LocationListener = object : LocationListener {
 		override fun onLocationChanged(location: Location) {
 			val x = location.latitude
 			val y = location.longitude
-			val distance = hypot(x - point!!.posX, y - point!!.posY)
-			if (distance < 0.00021 && !point!!.opened) //если выполняется это условие, то вы открыли точку
+			val distance = hypot(x - point.posX, y - point.posY)
+			if (distance < 0.00021 && !point.opened) //если выполняется это условие, то вы открыли точку
 			{
 				openPoint()
 			} else {
-				bt_map_img.setImageResource(point!!.getIdRes(distance))
+				bt_map_img.setImageResource(point.getIdRes(distance))
 			}
 		}
 
@@ -50,6 +48,38 @@ class PointActivityGLES : AppCompatActivity(), View.OnClickListener {
 
 	public override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
+		setupOrientation()
+
+		setContentView(R.layout.activity_point1)
+
+		val pathes = TexturePathes(top = "${point.pathTexture}top.jpg",
+								   bottom = "${point.pathTexture}bottom.jpg",
+								   right = "${point.pathTexture}right.jpg",
+								   left = "${point.pathTexture}left.jpg",
+								   front = "${point.pathTexture}front.jpg",
+								   back = "${point.pathTexture}back.jpg")
+
+		gl_surface_view.start(this, pathes)
+
+		bt_point_fullscreen.setOnClickListener { changeOrientation() }
+		map_img.setOnClickListener { map_img.visibility = View.INVISIBLE }
+		bt_map_img.setOnClickListener {
+			bt_map_img.visibility = View.VISIBLE
+			openPoint()
+		}
+		bt_open_img.setOnClickListener {
+			bt_open_img.visibility = View.INVISIBLE
+			finish()
+		}
+
+		map_img.setImageDrawable(loadImage("${point.pathTexture}map.jpg"))
+
+		//TODO добавить запрос разрешения на геолокацию
+		gps.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER,
+								   1000, 0f, locationListener)
+	}
+
+	private fun setupOrientation() {
 		if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
 			requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
 			window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
@@ -57,38 +87,19 @@ class PointActivityGLES : AppCompatActivity(), View.OnClickListener {
 		} else {
 			requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 		}
-		setContentView(R.layout.activity_point1)
-		gl_surface_view.setEGLContextClientVersion(2)
-		val mRender = Render(this)
-		gl_surface_view.setRenderer(mRender)
-		try {
-			placeDataSource = PlaceDataSource(this)
-			point = placeDataSource.getList()[intent.getIntExtra("id", -1)]
-			mRender.path = point!!.pathTexture
-		} catch (e: Exception) {
-			Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show()
-			finish()
-		}
-		bt_point_fullscreen.setOnClickListener(this)
-		bt_map_img.setOnClickListener(this)
-		map_img.setOnClickListener(this)
-		map_img.visibility = View.INVISIBLE
-		try {
-			val ims = assets.open(point!!.pathTexture + "map.jpg")
-			val d = Drawable.createFromStream(ims, null)
-			map_img.setImageDrawable(d)
-		} catch (ex: IOException) {
-			return
-		}
-		bt_open_img.visibility = View.INVISIBLE
-		bt_open_img.setBackgroundColor(Color.TRANSPARENT)
-		bt_open_img.setImageResource(R.drawable.test)
-		bt_open_img.setOnClickListener(this)
-		gps = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-		//TODO добавить запрос разрешения на геолокацию
-		gps!!.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER,
-								   1000, 0f, locationListener)
 	}
+
+	private fun changeOrientation() {
+		if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+			requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+		} else if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+			requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+		}
+	}
+
+	private fun loadImage(path: String): Drawable? =
+		runCatching { Drawable.createFromStream(assets.open(path), null) }
+			.getOrNull()
 
 	override fun onStart() {
 		super.onStart()
@@ -101,43 +112,19 @@ class PointActivityGLES : AppCompatActivity(), View.OnClickListener {
 
 	override fun onResume() {
 		super.onResume()
-		gl_surface_view.onResume()
 		bt_map_img.setImageResource(R.drawable.dist_0)
-	}
-
-	override fun onPause() {
-		super.onPause()
-		gl_surface_view.onPause()
 	}
 
 	override fun onDestroy() {
 		super.onDestroy()
-		gps!!.removeUpdates(locationListener)
-	}
-
-	override fun onClick(v: View) {
-		when (v.id) {
-			R.id.bt_point_fullscreen -> if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE else if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-
-			R.id.bt_map_img          -> {
-				bt_map_img.visibility = View.VISIBLE
-				openPoint()
-			}
-
-			R.id.map_img             -> map_img.visibility = View.INVISIBLE
-
-			R.id.bt_open_img         -> {
-				bt_open_img.visibility = View.INVISIBLE
-				finish()
-			}
-		}
+		gps.removeUpdates(locationListener)
 	}
 
 	fun openPoint() {
-		point!!.opened = true
+		point.opened = true
 		val sPref = getSharedPreferences("Places", Context.MODE_PRIVATE)
 		val ed = sPref.edit()
-		ed.putBoolean(point!!.openName, true)
+		ed.putBoolean(point.openName, true)
 		ed.apply()
 		val anim = AnimationUtils.loadAnimation(this, R.anim.anim_alpha)
 		bt_open_img.startAnimation(anim)
