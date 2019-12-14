@@ -5,7 +5,7 @@
 
 	<uses-feature
 		android:glEsVersion="0x00020000"
-		android:required="true"></uses-feature>
+		android:required="true" />
 
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -36,9 +36,9 @@
 			</intent-filter>
 		</activity>
 
-		<activity android:name=".Quest.ListQuest" />
-		<activity android:name=".Quest.QuestActivity" />
-		<activity android:name=".Quest.QuestTaskGPS" />
+		<activity android:name=".quest.ListQuest" />
+		<activity android:name=".quest.QuestActivity" />
+		<activity android:name=".quest.QuestTaskGPS" />
 
 		<meta-data
 			android:name="com.google.android.gms.games.APP_ID"

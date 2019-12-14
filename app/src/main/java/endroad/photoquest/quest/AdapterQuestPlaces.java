@@ -1,4 +1,4 @@
-package endroad.photoquest.Quest;
+package endroad.photoquest.quest;
 
 import android.content.Context;
 import android.graphics.Color;

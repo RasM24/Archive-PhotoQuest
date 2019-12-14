@@ -3,7 +3,7 @@ package endroad.photoquest.view
 import android.content.Context
 import android.graphics.drawable.AnimationDrawable
 import androidx.fragment.app.Fragment
-import endroad.photoquest.Quest.ListQuest
+import endroad.photoquest.quest.ListQuest
 import endroad.photoquest.R
 import endroad.photoquest.data.PlaceDataSource
 import endroad.photoquest.places.PlaceListFragment
