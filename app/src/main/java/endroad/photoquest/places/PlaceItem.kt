@@ -15,27 +15,16 @@ class PlaceItem(item: Place) : ModelAbstractItem<Place, PlaceItem.ViewHolder>(it
 
 	override val type = R.id.panoramic_place_item
 
-	//TODO вынести в ресурсы
-	private val colorOpenedPlace = Color.argb(200, 180, 180, 180)
-	private val colorDontOpenedPlace = Color.argb(200, 255, 255, 255)
-
 	override fun getViewHolder(v: View) = ViewHolder(v)
 
 	override fun bindView(holder: ViewHolder, payloads: MutableList<Any>) {
 		super.bindView(holder, payloads)
 
 		//TODO придумать, что сделать с дистанцией
-		//val distance = sqrt((listPlacesActivityActivity.x - getItem(position).posX).pow(2.0) + (listPlacesActivityActivity.y - getItem(position).posY).pow(2.0))
 
-		if (model.opened)
-			holder.itemView.setBackgroundColor(colorOpenedPlace)
-		else
-			holder.itemView.setBackgroundColor(colorDontOpenedPlace)
-
-		holder.name.text = model.name()
-		holder.description.text = model.nameDiff()
+		holder.name.text = model.openName
 		//holder.icon.setImageResource(model.getIdRes(distance))
-		holder.iconDistance.setImageResource(model.getArea())
+		holder.iconDistance.setImageResource(model.area)
 
 	}
 

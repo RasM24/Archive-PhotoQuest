@@ -7,6 +7,5 @@
 	<string name="bt_setting">Настройки</string>
 	<string name="bt_quest">Квест</string>
 	<string name="bt_exit">Выход</string>
-	<string name="bt_quest_task">Задание</string>
 
 </resources>

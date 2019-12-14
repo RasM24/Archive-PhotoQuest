@@ -3,7 +3,6 @@ package endroad.photoquest.view
 import android.content.Context
 import android.graphics.drawable.AnimationDrawable
 import androidx.fragment.app.Fragment
-import endroad.photoquest.quest.ListQuest
 import endroad.photoquest.R
 import endroad.photoquest.data.PlaceDataSource
 import endroad.photoquest.places.PlaceListFragment
@@ -17,11 +16,10 @@ class MainFragment : BaseFragment() {
 
 	override val layout = R.layout.main_fragment
 
-	private val placeDataSource by lazy { PlaceDataSource(requireContext()) }
+	private val placeDataSource by lazy { PlaceDataSource() }
 
 	override fun setupViewComponents() {
 		bt_place.setOnClickListener { requireFragmentManager().forwardTo(PlaceListFragment.newInstance()) }
-		bt_quest.setOnClickListener { requireContext().startScreen(ListQuest::class.java) }
 		bt_setting.setOnClickListener { clearProgress() }
 		bt_exit.setOnClickListener { finish() }
 

@@ -9,16 +9,10 @@
 
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-	<uses-permission android:name="android.permission.INTERNET" />
-	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-	<uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
-	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
-	<uses-permission
-		android:name="android.permission.READ_EXTERNAL_STORAGE"
-		android:maxSdkVersion="18" />
+	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
 	<application
+		android:name=".application.App"
 		android:allowBackup="true"
 		android:icon="@drawable/ic_launcher"
 		android:label="@string/app_name"
@@ -36,17 +30,9 @@
 			</intent-filter>
 		</activity>
 
-		<activity android:name=".quest.ListQuest" />
-		<activity android:name=".quest.QuestActivity" />
-		<activity android:name=".quest.QuestTaskGPS" />
-
-		<meta-data
-			android:name="com.google.android.gms.games.APP_ID"
-			android:value="@string/app_id" />
 		<meta-data
 			android:name="com.google.android.maps.v2.API_KEY"
 			android:value="AIzaSyCXWgLzGi1gA7lLajFzoGz8NUEpLx3TiSk" />
 
 	</application>
-
 </manifest>
