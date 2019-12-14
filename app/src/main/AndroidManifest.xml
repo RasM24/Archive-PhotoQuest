@@ -36,7 +36,6 @@
 			</intent-filter>
 		</activity>
 
-		<activity android:name=".places.ListPlacesActivity" />
 		<activity android:name=".Quest.ListQuest" />
 		<activity android:name=".places.panoram.PointActivityGLES" />
 		<activity android:name=".Quest.QuestActivity" />

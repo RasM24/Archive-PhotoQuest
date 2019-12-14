@@ -6,11 +6,12 @@ import androidx.fragment.app.Fragment
 import endroad.photoquest.Quest.ListQuest
 import endroad.photoquest.R
 import endroad.photoquest.data.PlaceDataSource
-import endroad.photoquest.places.ListPlacesActivity
+import endroad.photoquest.places.PlaceListFragment
 import kotlinx.android.synthetic.main.main_fragment.*
 import ru.endroad.arena.viewlayer.extension.startScreen
 import ru.endroad.arena.viewlayer.fragment.BaseFragment
 import ru.endroad.navigation.finish
+import ru.endroad.navigation.forwardTo
 
 class MainFragment : BaseFragment() {
 
@@ -19,7 +20,7 @@ class MainFragment : BaseFragment() {
 	private val placeDataSource by lazy { PlaceDataSource(requireContext()) }
 
 	override fun setupViewComponents() {
-		bt_place.setOnClickListener { requireContext().startScreen(ListPlacesActivity::class.java) }
+		bt_place.setOnClickListener { requireFragmentManager().forwardTo(PlaceListFragment.newInstance()) }
 		bt_quest.setOnClickListener { requireContext().startScreen(ListQuest::class.java) }
 		bt_setting.setOnClickListener { clearProgress() }
 		bt_exit.setOnClickListener { finish() }
