@@ -6,7 +6,6 @@ import android.opengl.GLSurfaceView
 import android.opengl.Matrix
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
-import java.nio.FloatBuffer
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 import kotlin.math.cos
@@ -14,8 +13,9 @@ import kotlin.math.sin
 
 private const val ONE = 1.0f
 private const val ZERO = 0.0f
-private const val mPositionDataSize = 3
-private const val mTextureCoordinateDataSize = 2
+private const val POSITION_DATA_SIZE = 3
+private const val TEXTURE_COORDINATE_DATA_SIZE = 2
+private const val BYTES_PER_FLOAT = 4
 // X, Y, Z
 private val cubePositionData = floatArrayOf(
 	// Front face
@@ -50,11 +50,17 @@ internal class Render internal constructor(private val mActivityContext: Context
 	 * Store the current rotation.
 	 */
 	private val mCurrentRotation = FloatArray(16)
-	/**
-	 * Store our model data in a float buffer.
-	 */
-	private val mCubePositions: FloatBuffer
-	private val mCubeTextureCoordinates: FloatBuffer
+
+	private val mCubePositions = ByteBuffer.allocateDirect(cubePositionData.size * BYTES_PER_FLOAT)
+		.order(ByteOrder.nativeOrder())
+		.asFloatBuffer()
+		.apply { put(cubePositionData).position(0) }
+
+	private val mCubeTextureCoordinates = ByteBuffer.allocateDirect(cubeTextureCoordinateData.size * BYTES_PER_FLOAT)
+		.order(ByteOrder.nativeOrder())
+		.asFloatBuffer()
+		.apply { put(cubeTextureCoordinateData).position(0) }
+
 	var path: String? = null
 	var zoom = 10f
 		set(value) {
@@ -112,25 +118,6 @@ internal class Render internal constructor(private val mActivityContext: Context
 	private var visionFi = 0f // азимутальный угол камеры
 	private var visionPsy = 0f // зенитный угол камеры
 	private var ratio = 0f
-
-	/**
-	 * Initialize the model data.
-	 */
-	init {
-	// Texture coordinate data.
-	// Because images have a Y axis pointing downward (values increase as you move down the image) while
-	// OpenGL has a Y axis pointing upward, we adjust for that here by flipping the Y axis.
-	// What's more is that the texture coordinates are the same for every face.
-
-		// Initialize the buffers.
-		val mBytesPerFloat = 4 //How many bytes per float.
-		mCubePositions = ByteBuffer.allocateDirect(cubePositionData.size * mBytesPerFloat)
-			.order(ByteOrder.nativeOrder()).asFloatBuffer()
-		mCubePositions.put(cubePositionData).position(0)
-		mCubeTextureCoordinates = ByteBuffer.allocateDirect(cubeTextureCoordinateData.size * mBytesPerFloat)
-			.order(ByteOrder.nativeOrder()).asFloatBuffer()
-		mCubeTextureCoordinates.put(cubeTextureCoordinateData).position(0)
-	}
 
 	override fun onSurfaceCreated(glUnused: GL10,
 								  config: EGLConfig) { // Set the background clear color to black.
@@ -216,7 +203,7 @@ internal class Render internal constructor(private val mActivityContext: Context
 		// Pass in the texture coordinate information
 		mCubeTextureCoordinates.position(0)
 		GLES20.glVertexAttribPointer(mTextureCoordinateHandle,
-									 mTextureCoordinateDataSize,
+									 TEXTURE_COORDINATE_DATA_SIZE,
 									 GLES20.GL_FLOAT,
 									 false,
 									 0,
@@ -261,7 +248,7 @@ internal class Render internal constructor(private val mActivityContext: Context
 
 	private fun passInThePositionInformation() {
 		mCubePositions.position(0)
-		GLES20.glVertexAttribPointer(mPositionHandle, mPositionDataSize, GLES20.GL_FLOAT, false, 0, mCubePositions)
+		GLES20.glVertexAttribPointer(mPositionHandle, POSITION_DATA_SIZE, GLES20.GL_FLOAT, false, 0, mCubePositions)
 		GLES20.glEnableVertexAttribArray(mPositionHandle)
 	}
 
