@@ -8,15 +8,15 @@ import com.mikepenz.fastadapter.IModelItem
 import endroad.photoquest.R
 import endroad.photoquest.data.PlaceDataSource
 import endroad.photoquest.model.Place
+import org.koin.android.ext.android.inject
 import ru.endroad.arena.viewlayer.fragment.ListFragment
 import ru.endroad.navigation.forwardTo
 
 class PlaceListFragment : ListFragment() {
 
 	override val layout = R.layout.place_list_fragment
-	private val placeDataSource by lazy { PlaceDataSource(requireContext()) }
 
-	//private val adapter by lazy { AdapterListPlaces(this, placeDataSource.getList()) }
+	private val placeDataSource: PlaceDataSource by inject()
 
 	//TODO memory leak - убрать зависимость AdapterListPlaces и x,y
 	@JvmField

@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import endroad.photoquest.R
 import endroad.photoquest.data.PlaceDataSource
 import kotlinx.android.synthetic.main.panoramic_place_fragment.*
+import org.koin.android.ext.android.inject
 import ru.endroad.arena.viewlayer.extension.argument
 import ru.endroad.arena.viewlayer.extension.hideViews
 import ru.endroad.arena.viewlayer.extension.showViews
@@ -30,8 +31,9 @@ class PanoramicPlaceFragment : BaseFragment() {
 
 	private val placeId: Int by argument(PLACE_ID)
 
-	//TODO криво и костыльно, будет в таком виде до перехода на фрагменты
-	private val point by lazy { PlaceDataSource(requireContext()).getList()[placeId] }
+	private val placeDataSource: PlaceDataSource by inject()
+
+	private val point get() = placeDataSource.getList()[placeId]
 
 	private val gps by lazy { requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager }
 
