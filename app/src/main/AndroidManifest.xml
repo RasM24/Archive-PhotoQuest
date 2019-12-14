@@ -37,10 +37,6 @@
 			</intent-filter>
 		</activity>
 
-		<activity android:name=".quest.ListQuest" />
-		<activity android:name=".quest.QuestActivity" />
-		<activity android:name=".quest.QuestTaskGPS" />
-
 		<meta-data
 			android:name="com.google.android.gms.games.APP_ID"
 			android:value="@string/app_id" />
