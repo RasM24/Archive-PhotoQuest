@@ -1,45 +1,30 @@
 package endroad.photoquest.model
 
-import endroad.photoquest.*
+import com.google.android.gms.maps.model.LatLng
+import endroad.photoquest.R
+import kotlin.math.hypot
 
-class Place(val openName: String, //public int id;
-			private val area: Int,
-			private val point: Int,
+class Place(val openName: String,
+			val area: Int,
 			val posX: Double,
 			val posY: Double,
 			val pathTexture: String) {
 
-	fun nameDiff(): String? {
-		return when (point) {
-			POINT_DIFF1 -> PLACE_DIFF1
-			POINT_DIFF2 -> PLACE_DIFF2
-			POINT_DIFF3 -> PLACE_DIFF3
-			POINT_DIFF4 -> PLACE_DIFF4
-			else        -> null
-		}
-	}
-
-	fun getArea(): Int {
-		return when (area) {
-			AREA_CENTR -> AREA_CENTR_O
-			AREA_KIROV -> AREA_KIROV_O
-			AREA_LENIN -> AREA_LENIN_O
-			AREA_OKTYB -> AREA_OKTYB_O
-			AREA_SOVET -> AREA_SOVET_O
-			AREA_SVERD -> AREA_SVERD_O
-			AREA_ZHELZ -> AREA_ZHELZ_O
-			else       -> 0
-		}
-	}
-
 	//TODO убрать магические числа
-	fun getIdRes(dist: Double): Int {
+	fun getDistanceIcon(userPosition: LatLng): Int {
+		val distance = calculateDistance(userPosition)
+
 		return when {
-			dist < 0.00021f -> R.drawable.dist_1
-			dist < 0.00033f -> R.drawable.dist_2
-			dist < 0.0005f  -> R.drawable.dist_3
-			dist < 0.0008f  -> R.drawable.dist_4
+			distance < 2e-4 -> R.drawable.dist_1
+			distance < 3e-4 -> R.drawable.dist_2
+			distance < 5e-4 -> R.drawable.dist_3
+			distance < 8e-4 -> R.drawable.dist_4
 			else            -> R.drawable.dist_5
 		}
 	}
+
+	//TODO взять нормальный алгоритм определения расстояния
+	private fun calculateDistance(userPosition: LatLng): Double =
+		hypot(userPosition.latitude - posX, userPosition.longitude - posY)
+
 }

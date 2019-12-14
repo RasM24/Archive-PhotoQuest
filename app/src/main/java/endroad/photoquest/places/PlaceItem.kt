@@ -21,12 +21,10 @@ class PlaceItem(item: Place) : ModelAbstractItem<Place, PlaceItem.ViewHolder>(it
 		super.bindView(holder, payloads)
 
 		//TODO придумать, что сделать с дистанцией
-		//val distance = sqrt((listPlacesActivityActivity.x - getItem(position).posX).pow(2.0) + (listPlacesActivityActivity.y - getItem(position).posY).pow(2.0))
 
 		holder.name.text = model.openName
-		holder.description.text = model.nameDiff()
 		//holder.icon.setImageResource(model.getIdRes(distance))
-		holder.iconDistance.setImageResource(model.getArea())
+		holder.iconDistance.setImageResource(model.area)
 
 	}
 

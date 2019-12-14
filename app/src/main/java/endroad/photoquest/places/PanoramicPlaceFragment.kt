@@ -12,6 +12,7 @@ import android.view.Window
 import android.view.WindowManager
 import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
+import com.google.android.gms.maps.model.LatLng
 import endroad.photoquest.R
 import endroad.photoquest.data.PlaceDataSource
 import kotlinx.android.synthetic.main.panoramic_place_fragment.*
@@ -23,7 +24,6 @@ import ru.endroad.arena.viewlayer.extension.withArgument
 import ru.endroad.arena.viewlayer.fragment.BaseFragment
 import ru.endroad.navigation.finish
 import ru.endroad.panorama.TexturePathes
-import kotlin.math.hypot
 
 class PanoramicPlaceFragment : BaseFragment() {
 
@@ -39,11 +39,10 @@ class PanoramicPlaceFragment : BaseFragment() {
 
 	private val locationListener: LocationListener = object : LocationListener {
 		override fun onLocationChanged(location: Location) {
-			val x = location.latitude
-			val y = location.longitude
-			val distance = hypot(x - point.posX, y - point.posY)
-			bt_map_img.setImageResource(point.getIdRes(distance))
+			bt_map_img.setImageResource(point.getDistanceIcon(location.latLng))
 		}
+
+		val Location.latLng get() = LatLng(latitude, longitude)
 
 		override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {}
 		override fun onProviderEnabled(provider: String) {}
@@ -120,7 +119,7 @@ class PanoramicPlaceFragment : BaseFragment() {
 		gps.removeUpdates(locationListener)
 	}
 
-	fun openPoint() {
+	private fun openPoint() {
 		val sPref = requireContext().getSharedPreferences("Places", Context.MODE_PRIVATE)
 		val ed = sPref.edit()
 		ed.putBoolean(point.openName, true)
