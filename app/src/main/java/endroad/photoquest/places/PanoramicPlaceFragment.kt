@@ -1,4 +1,4 @@
-package endroad.photoquest.places.panoram
+package endroad.photoquest.places
 
 import android.content.Context
 import android.content.pm.ActivityInfo
@@ -8,25 +8,32 @@ import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
-import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.view.animation.AnimationUtils
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import endroad.photoquest.R
 import endroad.photoquest.data.PlaceDataSource
-import kotlinx.android.synthetic.main.activity_point1.*
+import kotlinx.android.synthetic.main.panoramic_place_fragment.*
+import ru.endroad.arena.viewlayer.extension.argument
+import ru.endroad.arena.viewlayer.extension.hideViews
+import ru.endroad.arena.viewlayer.extension.showViews
+import ru.endroad.arena.viewlayer.extension.withArgument
+import ru.endroad.arena.viewlayer.fragment.BaseFragment
+import ru.endroad.navigation.finish
 import ru.endroad.panorama.TexturePathes
 import kotlin.math.hypot
 
-class PointActivityGLES : AppCompatActivity() {
+class PanoramicPlaceFragment : BaseFragment() {
 
-	private val placeId: Int by lazy { intent.getIntExtra("id", -1) }
+	override val layout = R.layout.panoramic_place_fragment
+
+	private val placeId: Int by argument(PLACE_ID)
 
 	//TODO криво и костыльно, будет в таком виде до перехода на фрагменты
-	private val point by lazy { PlaceDataSource(this).getList()[placeId] }
+	private val point by lazy { PlaceDataSource(requireContext()).getList()[placeId] }
 
-	private val gps by lazy { getSystemService(Context.LOCATION_SERVICE) as LocationManager }
+	private val gps by lazy { requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager }
 
 	private val locationListener: LocationListener = object : LocationListener {
 		override fun onLocationChanged(location: Location) {
@@ -46,12 +53,8 @@ class PointActivityGLES : AppCompatActivity() {
 		override fun onProviderDisabled(provider: String) {}
 	}
 
-	public override fun onCreate(savedInstanceState: Bundle?) {
-		super.onCreate(savedInstanceState)
+	override fun setupViewComponents() {
 		setupOrientation()
-
-		setContentView(R.layout.activity_point1)
-
 		val pathes = TexturePathes(top = "${point.pathTexture}top.jpg",
 								   bottom = "${point.pathTexture}bottom.jpg",
 								   right = "${point.pathTexture}right.jpg",
@@ -62,43 +65,43 @@ class PointActivityGLES : AppCompatActivity() {
 		gl_surface_view.start(this, pathes)
 
 		bt_point_fullscreen.setOnClickListener { changeOrientation() }
-		map_img.setOnClickListener { map_img.visibility = View.INVISIBLE }
+		map_img.setOnClickListener { showViews(map_img) }
 		bt_map_img.setOnClickListener {
-			bt_map_img.visibility = View.VISIBLE
+			showViews(bt_map_img)
 			openPoint()
 		}
 		bt_open_img.setOnClickListener {
-			bt_open_img.visibility = View.INVISIBLE
+			hideViews(bt_open_img)
 			finish()
 		}
 
 		map_img.setImageDrawable(loadImage("${point.pathTexture}map.jpg"))
 
 		//TODO добавить запрос разрешения на геолокацию
-		gps.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER,
-								   1000, 0f, locationListener)
+//		gps.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER,
+//								   1000, 0f, locationListener)
 	}
 
 	private fun setupOrientation() {
 		if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-			requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-			window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
-			requestWindowFeature(Window.FEATURE_NO_TITLE)
+			requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+			requireActivity().window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+			requireActivity().requestWindowFeature(Window.FEATURE_NO_TITLE)
 		} else {
-			requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+			requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 		}
 	}
 
 	private fun changeOrientation() {
 		if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
-			requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+			requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
 		} else if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-			requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+			requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 		}
 	}
 
 	private fun loadImage(path: String): Drawable? =
-		runCatching { Drawable.createFromStream(assets.open(path), null) }
+		runCatching { Drawable.createFromStream(requireContext().assets.open(path), null) }
 			.getOrNull()
 
 	override fun onStart() {
@@ -122,16 +125,21 @@ class PointActivityGLES : AppCompatActivity() {
 
 	fun openPoint() {
 		point.opened = true
-		val sPref = getSharedPreferences("Places", Context.MODE_PRIVATE)
+		val sPref = requireContext().getSharedPreferences("Places", Context.MODE_PRIVATE)
 		val ed = sPref.edit()
 		ed.putBoolean(point.openName, true)
 		ed.apply()
-		val anim = AnimationUtils.loadAnimation(this, R.anim.anim_alpha)
+		val anim = AnimationUtils.loadAnimation(requireContext(), R.anim.anim_alpha)
 		bt_open_img.startAnimation(anim)
-		bt_open_img.visibility = View.VISIBLE
+		showViews(bt_open_img)
 	}
 
-	override fun onBackPressed() {
-		finish()
+	companion object {
+		private const val PLACE_ID = "placeId"
+
+		fun newInstance(id: Int): Fragment =
+			PanoramicPlaceFragment().withArgument {
+				putInt(PLACE_ID, id)
+			}
 	}
 }

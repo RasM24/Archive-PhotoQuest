@@ -1,18 +1,15 @@
 package endroad.photoquest.places
 
-import android.content.Context
-import android.content.Intent
 import android.location.Location
 import android.location.LocationListener
-import android.location.LocationManager
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.mikepenz.fastadapter.IModelItem
 import endroad.photoquest.R
 import endroad.photoquest.data.PlaceDataSource
 import endroad.photoquest.model.Place
-import endroad.photoquest.places.panoram.PointActivityGLES
 import ru.endroad.arena.viewlayer.fragment.ListFragment
+import ru.endroad.navigation.forwardTo
 
 class PlaceListFragment : ListFragment() {
 
@@ -55,9 +52,7 @@ class PlaceListFragment : ListFragment() {
 		//TODO костыль, временно.. надеюсь :)
 		val position: Int = placeDataSource.getList().indexOf(panoramicPlace)
 
-		val intent = Intent(requireContext(), PointActivityGLES::class.java)
-		intent.putExtra("id", position)
-		startActivity(intent)
+		requireFragmentManager().forwardTo(PanoramicPlaceFragment.newInstance(position))
 
 		return true
 	}

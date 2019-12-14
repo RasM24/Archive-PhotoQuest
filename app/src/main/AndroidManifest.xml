@@ -37,7 +37,6 @@
 		</activity>
 
 		<activity android:name=".Quest.ListQuest" />
-		<activity android:name=".places.panoram.PointActivityGLES" />
 		<activity android:name=".Quest.QuestActivity" />
 		<activity android:name=".Quest.QuestTaskGPS" />
 
