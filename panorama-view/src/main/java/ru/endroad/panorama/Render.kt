@@ -1,10 +1,9 @@
-package endroad.photoquest.places.panoram
+package ru.endroad.panorama
 
 import android.content.Context
 import android.opengl.GLES20
 import android.opengl.GLSurfaceView
 import android.opengl.Matrix
-import endroad.photoquest.R
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.nio.FloatBuffer
@@ -13,12 +12,12 @@ import javax.microedition.khronos.opengles.GL10
 import kotlin.math.cos
 import kotlin.math.sin
 
-const val ONE = 1.0f
-const val ZERO = 0.0f
-const val mPositionDataSize = 3
-const val mTextureCoordinateDataSize = 2
+private const val ONE = 1.0f
+private const val ZERO = 0.0f
+private const val mPositionDataSize = 3
+private const val mTextureCoordinateDataSize = 2
 // X, Y, Z
-val cubePositionData = floatArrayOf(
+private val cubePositionData = floatArrayOf(
 	// Front face
 	-ONE, ONE, ONE, ONE, ONE, ONE, -ONE, -ONE, ONE, -ONE, -ONE, ONE, ONE, ONE, ONE, ONE, -ONE, ONE,
 	// Left face
@@ -42,7 +41,7 @@ private val cubeTextureCoordinateData = floatArrayOf(
 	ONE, ZERO, ZERO, ZERO, ONE, ONE, ONE, ONE, ZERO, ZERO, ZERO, ONE // Bottom face
 )
 
-class Render internal constructor(private val mActivityContext: Context) : GLSurfaceView.Renderer {
+internal class Render internal constructor(private val mActivityContext: Context) : GLSurfaceView.Renderer {
 	/**
 	 * Store the accumulated rotation.
 	 */
@@ -173,8 +172,7 @@ class Render internal constructor(private val mActivityContext: Context) : GLSur
 		mMVMatrixHandle = GLES20.glGetUniformLocation(mProgramHandle, "u_MVMatrix")
 		val mTextureUniformHandle = GLES20.glGetUniformLocation(mProgramHandle, "u_Texture") // This will be used to pass in the texture.
 		mPositionHandle = GLES20.glGetAttribLocation(mProgramHandle, "a_Position")
-		val mTextureCoordinateHandle = GLES20.glGetAttribLocation(mProgramHandle,
-																  "a_TexCoordinate") //  This will be used to pass in model texture coordinate information.
+		val mTextureCoordinateHandle = GLES20.glGetAttribLocation(mProgramHandle, "a_TexCoordinate") //  This will be used to pass in model texture coordinate information.
 
 		// Draw a cube.
 // Translate the cube into the screen.

@@ -1,4 +1,4 @@
-package endroad.photoquest.places.panoram
+package ru.endroad.panorama
 
 import android.content.Context
 import android.opengl.GLSurfaceView
@@ -10,7 +10,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.OnLifecycleEvent
 import kotlin.math.hypot
 
-class SurfaceView constructor(context: Context?, attrs: AttributeSet?) : GLSurfaceView(context, attrs), LifecycleObserver {
+class PanoramaView constructor(context: Context?, attrs: AttributeSet?) : GLSurfaceView(context, attrs), LifecycleObserver {
 	private var xstart = 0f
 	private var ystart = 0f
 	var forZoom = 0f
@@ -85,8 +85,10 @@ class SurfaceView constructor(context: Context?, attrs: AttributeSet?) : GLSurfa
 		} else {
 			xx = (event.getX(FIRST_FINGER) + event.getX(SECOND_FINGER)) / 2
 			yy = (event.getY(FIRST_FINGER) + event.getY(SECOND_FINGER)) / 2
-			var bb = renderZoom * forZoom / hypot(event.getX(FIRST_FINGER) - event.getX(SECOND_FINGER).toDouble(),
-												  event.getY(FIRST_FINGER) - event.getY(SECOND_FINGER).toDouble()).toFloat()
+			var bb = renderZoom * forZoom / hypot(event.getX(FIRST_FINGER) - event.getX(
+				SECOND_FINGER).toDouble(),
+												  event.getY(FIRST_FINGER) - event.getY(
+													  SECOND_FINGER).toDouble()).toFloat()
 			if (bb > 10) bb = 10f
 			if (bb < 2) bb = 2f
 			render?.zoom = bb

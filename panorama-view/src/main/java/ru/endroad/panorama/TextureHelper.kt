@@ -1,4 +1,4 @@
-package endroad.photoquest.places.panoram
+package ru.endroad.panorama
 
 import android.content.Context
 import android.graphics.Bitmap

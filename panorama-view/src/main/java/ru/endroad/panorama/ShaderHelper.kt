@@ -1,4 +1,4 @@
-package endroad.photoquest.places.panoram
+package ru.endroad.panorama
 
 import android.opengl.GLES20
 
@@ -9,7 +9,7 @@ import android.opengl.GLES20
  * @param shaderSource The shader source code.
  * @return An OpenGL handle to the shader.
  */
-fun compileShader(shaderType: Int, shaderSource: String?): Int {
+internal fun compileShader(shaderType: Int, shaderSource: String?): Int {
 	val shaderHandle = GLES20.glCreateShader(shaderType)
 
 	require(shaderHandle != 0) { "Error creating shader." }
@@ -36,7 +36,7 @@ fun compileShader(shaderType: Int, shaderSource: String?): Int {
  * @param attributes           Attributes that need to be bound to the program.
  * @return An OpenGL handle to the program.
  */
-fun createAndLinkProgram(vertexShaderHandle: Int, fragmentShaderHandle: Int, attributes: Array<String?>?): Int {
+internal fun createAndLinkProgram(vertexShaderHandle: Int, fragmentShaderHandle: Int, attributes: Array<String?>?): Int {
 	val programHandle = GLES20.glCreateProgram()
 
 	require(programHandle != 0) { "Error creating program." }
