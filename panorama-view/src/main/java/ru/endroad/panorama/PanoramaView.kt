@@ -93,7 +93,7 @@ class PanoramaView constructor(context: Context?, attrs: AttributeSet?) : GLSurf
 			if (bb < 2) bb = 2f
 			render?.zoom = bb
 		}
-		render?.run { turnVision(-(xx - xstart) * zoom / 3000, (yy - ystart) * zoom / 3000) }
+		render?.run { onTurnVision(-(xx - xstart) * zoom / 3000, (yy - ystart) * zoom / 3000) }
 		xstart = xx
 		ystart = yy
 	}
@@ -107,6 +107,5 @@ class PanoramaView constructor(context: Context?, attrs: AttributeSet?) : GLSurf
 	companion object {
 		const val FIRST_FINGER = 0
 		const val SECOND_FINGER = 1
-
 	}
 }

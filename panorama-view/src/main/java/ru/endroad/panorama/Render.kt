@@ -41,7 +41,7 @@ private val cubeTextureCoordinateData = floatArrayOf(
 	ONE, ZERO, ZERO, ZERO, ONE, ONE, ONE, ONE, ZERO, ZERO, ZERO, ONE // Bottom face
 )
 
-internal class Render internal constructor(private val mActivityContext: Context) : GLSurfaceView.Renderer {
+internal class Render internal constructor(private val mActivityContext: Context) : GLSurfaceView.Renderer, OnTurnVisionListener {
 	/**
 	 * Store the accumulated rotation.
 	 */
@@ -112,6 +112,26 @@ internal class Render internal constructor(private val mActivityContext: Context
 	private var visionFi = 0f // азимутальный угол камеры
 	private var visionPsy = 0f // зенитный угол камеры
 	private var ratio = 0f
+
+	/**
+	 * Initialize the model data.
+	 */
+	init {
+	// Texture coordinate data.
+	// Because images have a Y axis pointing downward (values increase as you move down the image) while
+	// OpenGL has a Y axis pointing upward, we adjust for that here by flipping the Y axis.
+	// What's more is that the texture coordinates are the same for every face.
+
+		// Initialize the buffers.
+		val mBytesPerFloat = 4 //How many bytes per float.
+		mCubePositions = ByteBuffer.allocateDirect(cubePositionData.size * mBytesPerFloat)
+			.order(ByteOrder.nativeOrder()).asFloatBuffer()
+		mCubePositions.put(cubePositionData).position(0)
+		mCubeTextureCoordinates = ByteBuffer.allocateDirect(cubeTextureCoordinateData.size * mBytesPerFloat)
+			.order(ByteOrder.nativeOrder()).asFloatBuffer()
+		mCubeTextureCoordinates.put(cubeTextureCoordinateData).position(0)
+	}
+
 	override fun onSurfaceCreated(glUnused: GL10,
 								  config: EGLConfig) { // Set the background clear color to black.
 		GLES20.glClearColor(0.0f, 0.0f, 0.0f, 0.0f)
@@ -172,7 +192,8 @@ internal class Render internal constructor(private val mActivityContext: Context
 		mMVMatrixHandle = GLES20.glGetUniformLocation(mProgramHandle, "u_MVMatrix")
 		val mTextureUniformHandle = GLES20.glGetUniformLocation(mProgramHandle, "u_Texture") // This will be used to pass in the texture.
 		mPositionHandle = GLES20.glGetAttribLocation(mProgramHandle, "a_Position")
-		val mTextureCoordinateHandle = GLES20.glGetAttribLocation(mProgramHandle, "a_TexCoordinate") //  This will be used to pass in model texture coordinate information.
+		val mTextureCoordinateHandle = GLES20.glGetAttribLocation(mProgramHandle,
+																  "a_TexCoordinate") //  This will be used to pass in model texture coordinate information.
 
 		// Draw a cube.
 // Translate the cube into the screen.
@@ -204,19 +225,6 @@ internal class Render internal constructor(private val mActivityContext: Context
 
 		passInThePositionInformation()
 		drawCube()
-	}
-
-	//TODO Переделать в listener
-	fun turnVision(deltaFi: Float, deltaPsy: Float) {
-		visionFi += deltaFi
-		visionPsy += deltaPsy
-
-		if (visionPsy > 1.5f) {
-			visionPsy = 1.5f
-		}
-		if (visionPsy < -1.5f) {
-			visionPsy = -1.5f
-		}
 	}
 
 	/**
@@ -257,22 +265,15 @@ internal class Render internal constructor(private val mActivityContext: Context
 		GLES20.glEnableVertexAttribArray(mPositionHandle)
 	}
 
-	/**
-	 * Initialize the model data.
-	 */
-	init {
-// Texture coordinate data.
-// Because images have a Y axis pointing downward (values increase as you move down the image) while
-// OpenGL has a Y axis pointing upward, we adjust for that here by flipping the Y axis.
-// What's more is that the texture coordinates are the same for every face.
+	override fun onTurnVision(deltaFi: Float, deltaPsy: Float) {
+		visionFi += deltaFi
+		visionPsy += deltaPsy
 
-		// Initialize the buffers.
-		val mBytesPerFloat = 4 //How many bytes per float.
-		mCubePositions = ByteBuffer.allocateDirect(cubePositionData.size * mBytesPerFloat)
-			.order(ByteOrder.nativeOrder()).asFloatBuffer()
-		mCubePositions.put(cubePositionData).position(0)
-		mCubeTextureCoordinates = ByteBuffer.allocateDirect(cubeTextureCoordinateData.size * mBytesPerFloat)
-			.order(ByteOrder.nativeOrder()).asFloatBuffer()
-		mCubeTextureCoordinates.put(cubeTextureCoordinateData).position(0)
+		if (visionPsy > 1.5f) {
+			visionPsy = 1.5f
+		}
+		if (visionPsy < -1.5f) {
+			visionPsy = -1.5f
+		}
 	}
 }
