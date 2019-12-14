@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity
 import endroad.photoquest.R
 import endroad.photoquest.data.PlaceDataSource
 import kotlinx.android.synthetic.main.activity_point1.*
+import ru.endroad.panorama.TexturePathes
 import kotlin.math.hypot
 
 class PointActivityGLES : AppCompatActivity() {
@@ -51,7 +52,14 @@ class PointActivityGLES : AppCompatActivity() {
 
 		setContentView(R.layout.activity_point1)
 
-		gl_surface_view.start(this, point.pathTexture)
+		val pathes = TexturePathes(top = "${point.pathTexture}top.jpg",
+								   bottom = "${point.pathTexture}bottom.jpg",
+								   right = "${point.pathTexture}right.jpg",
+								   left = "${point.pathTexture}left.jpg",
+								   front = "${point.pathTexture}front.jpg",
+								   back = "${point.pathTexture}back.jpg")
+
+		gl_surface_view.start(this, pathes)
 
 		bt_point_fullscreen.setOnClickListener { changeOrientation() }
 		map_img.setOnClickListener { map_img.visibility = View.INVISIBLE }

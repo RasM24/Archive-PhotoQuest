@@ -4,7 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.opengl.GLES20
 
-class CubeTextureEntity(
+internal class CubeTextureEntity(
 	private val topBitmap: Bitmap?,
 	private val bottomBitmap: Bitmap?,
 	private val leftBitmap: Bitmap?,
@@ -31,15 +31,17 @@ class CubeTextureEntity(
 	}
 
 	companion object {
-		fun fromBitmap(context: Context, pathTexture: String): CubeTextureEntity {
-			val top = context.loadBitmap("${pathTexture}top.jpg")
-			val bottom = context.loadBitmap("${pathTexture}bottom.jpg")
-			val right = context.loadBitmap("${pathTexture}right.jpg")
-			val left = context.loadBitmap("${pathTexture}left.jpg")
-			val front = context.loadBitmap("${pathTexture}front.jpg")
-			val back = context.loadBitmap("${pathTexture}back.jpg")
+		fun fromBitmap(context: Context, texturePathes: TexturePathes): CubeTextureEntity {
+			val top = context.loadBitmap(texturePathes.top)
+			val bottom = context.loadBitmap(texturePathes.bottom)
+			val right = context.loadBitmap(texturePathes.right)
+			val left = context.loadBitmap(texturePathes.left)
+			val front = context.loadBitmap(texturePathes.front)
+			val back = context.loadBitmap(texturePathes.back)
 
 			return CubeTextureEntity(top, bottom, left, right, front, back)
 		}
 	}
 }
+
+class TexturePathes(val top: String, val bottom: String, val left: String, val right: String, val front: String, val back: String)

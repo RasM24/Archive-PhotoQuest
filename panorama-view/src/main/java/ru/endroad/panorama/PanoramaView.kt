@@ -16,13 +16,13 @@ class PanoramaView constructor(context: Context?, attrs: AttributeSet?) : GLSurf
 	var forZoom = 0f
 	var renderZoom = 0f
 	var timeClick: Long = 0
-	private var render: Render? = null
+	private lateinit var render: Render
 
-	fun start(lifecycleOwner: LifecycleOwner, pathTexture: String) {
+	fun start(lifecycleOwner: LifecycleOwner, pathes: TexturePathes) {
 		lifecycleOwner.lifecycle.addObserver(this)
 		setEGLContextClientVersion(2)
 		//TODO Сделать вариативность выбора рендера. Как минимум для сферической панорамы
-		render = Render(context, CubeTextureEntity.fromBitmap(context, pathTexture))
+		render = Render(context, CubeTextureEntity.fromBitmap(context, pathes))
 
 		super.setRenderer(render)
 	}
@@ -40,7 +40,7 @@ class PanoramaView constructor(context: Context?, attrs: AttributeSet?) : GLSurf
 	}
 
 	private fun onDoubleClickListener() {
-		render?.let {
+		render.let {
 			if (it.zoom > 6)
 				it.zoom = it.zoom - 3.9f
 			else
@@ -62,7 +62,7 @@ class PanoramaView constructor(context: Context?, attrs: AttributeSet?) : GLSurf
 		ystart = (event.getY(FIRST_FINGER) + event.getY(SECOND_FINGER)) / 2
 		forZoom = hypot(event.getX(FIRST_FINGER) - event.getX(SECOND_FINGER).toDouble(),
 						event.getY(FIRST_FINGER) - event.getY(SECOND_FINGER).toDouble()).toFloat()
-		render?.let { renderZoom = it.zoom }
+		renderZoom = render.zoom
 	}
 
 	private fun onTouchPointerUp(event: MotionEvent) {
@@ -91,9 +91,9 @@ class PanoramaView constructor(context: Context?, attrs: AttributeSet?) : GLSurf
 													  SECOND_FINGER).toDouble()).toFloat()
 			if (bb > 10) bb = 10f
 			if (bb < 2) bb = 2f
-			render?.zoom = bb
+			render.zoom = bb
 		}
-		render?.run { onTurnVision(-(xx - xstart) * zoom / 3000, (yy - ystart) * zoom / 3000) }
+		render.run { onTurnVision(-(xx - xstart) * zoom / 3000, (yy - ystart) * zoom / 3000) }
 		xstart = xx
 		ystart = yy
 	}
