@@ -34,3 +34,10 @@
 - Частичный актуализация кода была проведена - вырезано явно лишнее.
 - Переведен на более современный стек
 - Дизайн оставил старый, на память =)
+
+### Скрины
+![device-2021-04-03-153248](https://user-images.githubusercontent.com/42086955/113474766-2ca8c880-949c-11eb-990c-bc33f58d14a2.png)
+![device-2021-04-03-153300](https://user-images.githubusercontent.com/42086955/113474769-2f0b2280-949c-11eb-915b-00e04a193862.png)
+![device-2021-04-03-153415](https://user-images.githubusercontent.com/42086955/113474770-30d4e600-949c-11eb-8a1d-17de2435391b.png)
+![device-2021-04-03-154111](https://user-images.githubusercontent.com/42086955/113474782-3f230200-949c-11eb-9bea-b38a05827456.png)
+![device-2021-04-03-154137](https://user-images.githubusercontent.com/42086955/113474783-3fbb9880-949c-11eb-9934-4e5cb7ea45f5.png)
