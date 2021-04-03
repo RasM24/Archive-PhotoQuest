@@ -1,15 +1,21 @@
 package endroad.photoquest.application
 
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import endroad.photoquest.R
+import endroad.photoquest.component.changeRoot
 import endroad.photoquest.view.MainFragment
-import ru.endroad.arena.viewlayer.activity.BaseActivity
-import ru.endroad.navigation.changeRoot
 
-class SingleActivity : BaseActivity() {
+class SingleActivity : AppCompatActivity() {
 
-	override val layout = R.layout.base_activity
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.base_activity)
 
-	override fun onFirstCreate() {
-		fragmentManager.changeRoot(MainFragment.newInstance())
-	}
+        savedInstanceState ?: openMainFragment()
+    }
+
+    private fun openMainFragment() {
+        supportFragmentManager.changeRoot(MainFragment())
+    }
 }

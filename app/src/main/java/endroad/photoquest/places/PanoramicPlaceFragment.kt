@@ -11,25 +11,23 @@ import android.os.Bundle
 import android.view.Window
 import android.view.WindowManager
 import android.view.animation.AnimationUtils
+import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.google.android.gms.maps.model.LatLng
 import endroad.photoquest.R
+import endroad.photoquest.component.CampFragment
+import endroad.photoquest.component.finish
 import endroad.photoquest.data.PlaceDataSource
 import kotlinx.android.synthetic.main.panoramic_place_fragment.*
 import org.koin.android.ext.android.inject
-import ru.endroad.arena.viewlayer.extension.argument
-import ru.endroad.arena.viewlayer.extension.hideViews
-import ru.endroad.arena.viewlayer.extension.showViews
-import ru.endroad.arena.viewlayer.extension.withArgument
-import ru.endroad.arena.viewlayer.fragment.BaseFragment
-import ru.endroad.navigation.finish
 import ru.endroad.panorama.TexturePathes
 
-class PanoramicPlaceFragment : BaseFragment() {
+class PanoramicPlaceFragment : CampFragment() {
 
 	override val layout = R.layout.panoramic_place_fragment
 
-	private val placeId: Int by argument(PLACE_ID)
+	private val placeId: Int by lazy { arguments?.getInt(PLACE_ID).let(::requireNotNull) }
 
 	private val placeDataSource: PlaceDataSource by inject()
 
@@ -44,30 +42,30 @@ class PanoramicPlaceFragment : BaseFragment() {
 
 		val Location.latLng get() = LatLng(latitude, longitude)
 
-		override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {}
-		override fun onProviderEnabled(provider: String) {}
-		override fun onProviderDisabled(provider: String) {}
+		override fun onStatusChanged(provider: String, status: Int, extras: Bundle) = Unit
+		override fun onProviderEnabled(provider: String) = Unit
+		override fun onProviderDisabled(provider: String) = Unit
 	}
 
 	override fun setupViewComponents() {
 		setupOrientation()
 		val pathes = TexturePathes(top = "${point.pathTexture}top.jpg",
-								   bottom = "${point.pathTexture}bottom.jpg",
-								   right = "${point.pathTexture}right.jpg",
-								   left = "${point.pathTexture}left.jpg",
-								   front = "${point.pathTexture}front.jpg",
-								   back = "${point.pathTexture}back.jpg")
+				bottom = "${point.pathTexture}bottom.jpg",
+				right = "${point.pathTexture}right.jpg",
+				left = "${point.pathTexture}left.jpg",
+				front = "${point.pathTexture}front.jpg",
+				back = "${point.pathTexture}back.jpg")
 
 		gl_surface_view.start(this, pathes)
 
 		bt_point_fullscreen.setOnClickListener { changeOrientation() }
-		map_img.setOnClickListener { showViews(map_img) }
+		map_img.setOnClickListener { map_img.isVisible = true }
 		bt_map_img.setOnClickListener {
-			showViews(bt_map_img)
+			map_img.isVisible = true
 			openPoint()
 		}
 		bt_open_img.setOnClickListener {
-			hideViews(bt_open_img)
+			bt_open_img.isVisible = false
 			finish()
 		}
 
@@ -97,8 +95,8 @@ class PanoramicPlaceFragment : BaseFragment() {
 	}
 
 	private fun loadImage(path: String): Drawable? =
-		runCatching { Drawable.createFromStream(requireContext().assets.open(path), null) }
-			.getOrNull()
+			runCatching { Drawable.createFromStream(requireContext().assets.open(path), null) }
+					.getOrNull()
 
 	override fun onStart() {
 		super.onStart()
@@ -126,15 +124,15 @@ class PanoramicPlaceFragment : BaseFragment() {
 		ed.apply()
 		val anim = AnimationUtils.loadAnimation(requireContext(), R.anim.anim_alpha)
 		bt_open_img.startAnimation(anim)
-		showViews(bt_open_img)
+		bt_open_img.isVisible = true
 	}
 
 	companion object {
 		private const val PLACE_ID = "placeId"
 
 		fun newInstance(id: Int): Fragment =
-			PanoramicPlaceFragment().withArgument {
-				putInt(PLACE_ID, id)
-			}
+				PanoramicPlaceFragment().apply {
+					arguments = bundleOf(PLACE_ID to id)
+				}
 	}
 }

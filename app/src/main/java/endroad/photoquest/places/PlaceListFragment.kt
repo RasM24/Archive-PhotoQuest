@@ -4,15 +4,15 @@ import android.location.Location
 import android.location.LocationListener
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import com.mikepenz.fastadapter.IModelItem
 import endroad.photoquest.R
+import endroad.photoquest.component.CampFragment
+import endroad.photoquest.component.forwardTo
 import endroad.photoquest.data.PlaceDataSource
 import endroad.photoquest.model.Place
+import kotlinx.android.synthetic.main.place_list_fragment.*
 import org.koin.android.ext.android.inject
-import ru.endroad.arena.viewlayer.fragment.ListFragment
-import ru.endroad.navigation.forwardTo
 
-class PlaceListFragment : ListFragment() {
+class PlaceListFragment : CampFragment() {
 
 	override val layout = R.layout.place_list_fragment
 
@@ -21,6 +21,7 @@ class PlaceListFragment : ListFragment() {
 	//TODO memory leak - убрать зависимость AdapterListPlaces и x,y
 	@JvmField
 	var x = 0.0
+
 	@JvmField
 	var y = 0.0
 	private val locationListener: LocationListener = object : LocationListener {
@@ -36,9 +37,10 @@ class PlaceListFragment : ListFragment() {
 	}
 
 	override fun setupViewComponents() {
-		placeDataSource.getList()
-			.map(::PlaceItem)
-			.setItems()
+		val adapter = PlacesAdapter(::onPlaceClick)
+		list.adapter = adapter
+
+		adapter.items = placeDataSource.getList()
 
 		//TODO добавить запрос разрешения на геолокацию
 //		val locationManager = requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
@@ -46,11 +48,9 @@ class PlaceListFragment : ListFragment() {
 //											   1000, 0f, locationListener)
 	}
 
-	override fun onClickItem(item: IModelItem<*, *>): Boolean {
-		val panoramicPlace = item.model as? Place ?: return false
-
+	private fun onPlaceClick(item: Place): Boolean {
 		//TODO костыль, временно.. надеюсь :)
-		val position: Int = placeDataSource.getList().indexOf(panoramicPlace)
+		val position: Int = placeDataSource.getList().indexOf(item)
 
 		requireFragmentManager().forwardTo(PanoramicPlaceFragment.newInstance(position))
 
@@ -59,6 +59,6 @@ class PlaceListFragment : ListFragment() {
 
 	companion object {
 		fun newInstance(): Fragment =
-			PlaceListFragment()
+				PlaceListFragment()
 	}
 }

@@ -2,17 +2,15 @@ package endroad.photoquest.view
 
 import android.content.Context
 import android.graphics.drawable.AnimationDrawable
-import androidx.fragment.app.Fragment
 import endroad.photoquest.R
+import endroad.photoquest.component.CampFragment
+import endroad.photoquest.component.finish
+import endroad.photoquest.component.forwardTo
 import endroad.photoquest.data.PlaceDataSource
 import endroad.photoquest.places.PlaceListFragment
 import kotlinx.android.synthetic.main.main_fragment.*
-import ru.endroad.arena.viewlayer.extension.startScreen
-import ru.endroad.arena.viewlayer.fragment.BaseFragment
-import ru.endroad.navigation.finish
-import ru.endroad.navigation.forwardTo
 
-class MainFragment : BaseFragment() {
+class MainFragment : CampFragment() {
 
 	override val layout = R.layout.main_fragment
 
@@ -38,10 +36,5 @@ class MainFragment : BaseFragment() {
 			ed.putBoolean(it.openName, false)
 		}
 		ed.apply()
-	}
-
-	companion object {
-		fun newInstance(): Fragment =
-			MainFragment()
 	}
 }
