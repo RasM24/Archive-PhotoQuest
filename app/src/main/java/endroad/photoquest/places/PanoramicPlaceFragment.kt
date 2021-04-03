@@ -48,7 +48,6 @@ class PanoramicPlaceFragment : CampFragment() {
 	}
 
 	override fun setupViewComponents() {
-		setupOrientation()
 		val pathes = TexturePathes(top = "${point.pathTexture}top.jpg",
 				bottom = "${point.pathTexture}bottom.jpg",
 				right = "${point.pathTexture}right.jpg",
@@ -74,16 +73,6 @@ class PanoramicPlaceFragment : CampFragment() {
 		//TODO добавить запрос разрешения на геолокацию
 //		gps.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER,
 //								   1000, 0f, locationListener)
-	}
-
-	private fun setupOrientation() {
-		if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-			requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-			requireActivity().window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
-			requireActivity().requestWindowFeature(Window.FEATURE_NO_TITLE)
-		} else {
-			requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-		}
 	}
 
 	private fun changeOrientation() {
